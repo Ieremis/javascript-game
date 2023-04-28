@@ -34,8 +34,8 @@ class Player {
             y: 0,
         };
 
-        this.width = 30;
-        this.height = 30;
+        this.width = 20;
+        this.height = 20;
 
         this.sides = {
             isUp: false,
@@ -44,12 +44,16 @@ class Player {
             isRight: true,
         };
 
+        const image = new Image(30, 30)
+        image.src = './Sprites/PersonagemBaixo-Sheet.gif'
+        this.image = image
+
         this.color = color;
+        
     }
 
     draw() {
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
+        c.drawImage(this.image, this.position.x, this.position.y)
     }
 
     update() {
