@@ -45,6 +45,7 @@ class Player {
         };
 
         this.color = color;
+        this.score = 0;
     }
 
     draw() {
@@ -54,7 +55,6 @@ class Player {
 
     update() {
         this.draw();
-        
         this.position.y += this.velocity.y;
         this.position.x += this.velocity.x;
 
@@ -121,6 +121,9 @@ function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     player1.update();
     player2.update();
+    c.font = "20px Arial"
+    c.fillText("Score do player 1: " + player1.score, 10, 30);
+    c.fillText("Score do player 2: " + player2.score, 610, 30);
     projectiles1.forEach((proj) => {
         proj.update();
     });
@@ -132,7 +135,8 @@ function animate() {
         const dist1 = Math.hypot(proj.x - (player2.position.x + 15), proj.y - (player2.position.y + 15))
         //console.log(dist1)
         if(dist1 - proj.radius < 1){
-            cancelAnimationFrame(animationId)
+            //cancelAnimationFrame(animationId)
+            player1.score++;
         }
     })
 
@@ -140,8 +144,10 @@ function animate() {
         const dist2 = Math.hypot(proj.x - (player1.position.x + 15), proj.y - (player1.position.y + 15))
         //console.log(dist1)
         if(dist2 - proj.radius < 5){
-            cancelAnimationFrame(animationId)
+            //cancelAnimationFrame(animationId)
+            player2.score++;
         }
+        
     })
 
     //BUG
@@ -387,3 +393,4 @@ addEventListener("keyup", (ev) => {
 });
 
 animate();
+
