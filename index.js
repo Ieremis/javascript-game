@@ -121,7 +121,7 @@ function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     player1.update();
     player2.update();
-    c.font = "20px Arial"
+    c.font = "10px Arial"
     c.fillText("Score do player 1: " + player1.score, 10, 30);
     c.fillText("Score do player 2: " + player2.score, 610, 30);
     projectiles1.forEach((proj) => {
