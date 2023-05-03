@@ -44,16 +44,36 @@ class Player {
             isRight: true,
         };
 
-        const image = new Image(30, 30)
-        image.src = './Sprites/PersonagemBaixo-Sheet.gif'
-        this.image = image
+        const down1 = new Image()
+        down1.src = './Sprites/Baixo1.png'
+        this.down1 = down1
+
+        const right1 = new Image()
+        right1.src = './Sprites/Direita1.png'
+        this.right1 = right1
+
+        const up1 = new Image()
+        up1.src = './Sprites/Cima1.png'
+        this.up1 = up1
+
+        const left1 = new Image()
+        left1.src = './Sprites/Esquerda1.png'
+        this.left1 = left1
 
         this.color = color;
         
     }
 
     draw() {
-        c.drawImage(this.image, this.position.x, this.position.y)
+        if(this.sides.isDown == true){
+            c.drawImage(this.down1, this.position.x, this.position.y, 100, 100)
+        } else if(this.sides.isRight == true){
+            c.drawImage(this.right1, this.position.x, this.position.y, 100, 100)
+        } else if(this.sides.isUp == true){
+            c.drawImage(this.up1, this.position.x, this.position.y, 100, 100)
+        } else if(this.sides.isLeft == true){
+            c.drawImage(this.left1, this.position.x, this.position.y, 100, 100)
+        }
     }
 
     update() {
@@ -97,12 +117,6 @@ const keys1 = {
         pressed: false,
     },
     left: {
-        pressed: false,
-    },
-    up: {
-        pressed: false,
-    },
-    down: {
         pressed: false,
     }
 };
@@ -248,7 +262,6 @@ addEventListener("keyup", (ev) => {
             break;
         case 87:
             console.log("cima");
-            keys1.up.pressed = false;
             player1.velocity.y = 0;
             break;
         case 68:
