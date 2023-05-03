@@ -154,13 +154,7 @@ function animate() {
         player1.velocity.x = 5;
     } else if (keys1.left.pressed && player1.position.x >= 0) {
         player1.velocity.x = -5;
-    } else if (keys1.up.pressed && player1.position.y >= 0) {
-        player1.velocity.y = -5;
-    }
-    else {
-        player1.velocity.x = 0;
-        player1.velocity.y = 0;
-    }
+    } 
 
     if (keys2.right.pressed && player2.position.x + player2.width <= 800) {
         player2.velocity.x = 5;
@@ -185,7 +179,7 @@ addEventListener("keydown", (ev) => {
             break;
         case 87:
             console.log("cima");
-            keys1.up.pressed = true;
+            player1.velocity.y = -5;
             player1.sides.isDown = false;
             player1.sides.isRight = false;
             player1.sides.isUp = true;
@@ -250,14 +244,17 @@ addEventListener("keyup", (ev) => {
         case 65:
             console.log("esquerda");
             keys1.left.pressed = false;
+            player1.velocity.x = 0;
             break;
         case 87:
             console.log("cima");
             keys1.up.pressed = false;
+            player1.velocity.y = 0;
             break;
         case 68:
             console.log("direita");
             keys1.right.pressed = false;
+            player1.velocity.x = 0;
             break;
         case 83:
             console.log("baixo");
