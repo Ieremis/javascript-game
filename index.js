@@ -64,15 +64,15 @@ class Player {
         
     }
 
-    draw() {
+    async draw() {
         if(this.sides.isDown == true){
-            c.drawImage(this.down1, this.position.x, this.position.y, 100, 100)
+            c.drawImage(this.down1, this.position.x, this.position.y, 80, 80)
         } else if(this.sides.isRight == true){
-            c.drawImage(this.right1, this.position.x, this.position.y, 100, 100)
+            c.drawImage(this.right1, this.position.x, this.position.y, 80, 80)
         } else if(this.sides.isUp == true){
-            c.drawImage(this.up1, this.position.x, this.position.y, 100, 100)
+            c.drawImage(this.up1, this.position.x, this.position.y, 80, 80)
         } else if(this.sides.isLeft == true){
-            c.drawImage(this.left1, this.position.x, this.position.y, 100, 100)
+            c.drawImage(this.left1, this.position.x, this.position.y, 80, 80)
         }
     }
 
@@ -150,7 +150,7 @@ function animate() {
         const dist1 = Math.hypot(proj.x - (player2.position.x + 15), proj.y - (player2.position.y + 15))
         //console.log(dist1)
         if(dist1 - proj.radius < 1){
-            cancelAnimationFrame(animationId)
+            //cancelAnimationFrame(animationId)
         }
     })
 
@@ -158,7 +158,7 @@ function animate() {
         const dist2 = Math.hypot(proj.x - (player1.position.x + 15), proj.y - (player1.position.y + 15))
         //console.log(dist1)
         if(dist2 - proj.radius < 5){
-            cancelAnimationFrame(animationId)
+            //cancelAnimationFrame(animationId)
         }
     })
 
@@ -298,8 +298,8 @@ addEventListener("keyup", (ev) => {
     if (player1.sides.isLeft == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 25,
+                player1.position.y + 55,
                 10,
                 "red",
                 {
@@ -311,8 +311,8 @@ addEventListener("keyup", (ev) => {
     } else if (player1.sides.isRight == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 50,
+                player1.position.y + 50,
                 10,
                 "red",
                 {
@@ -324,8 +324,8 @@ addEventListener("keyup", (ev) => {
     } else if (player1.sides.isUp == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 40,
+                player1.position.y - 10,
                 10,
                 "red",
                 {
@@ -337,8 +337,8 @@ addEventListener("keyup", (ev) => {
     } else if (player1.sides.isDown == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 45,
+                player1.position.y + 70,
                 10,
                 "red",
                 {
@@ -351,8 +351,8 @@ addEventListener("keyup", (ev) => {
     if (player2.sides.isLeft == true && ev.key == 'o') {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 25,
+                player2.position.y + 55,
                 10,
                 "black",
                 {
@@ -364,8 +364,8 @@ addEventListener("keyup", (ev) => {
     } else if (player2.sides.isRight == true && ev.key == 'o') {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 50,
+                player2.position.y + 50,
                 10,
                 "black",
                 {
@@ -377,8 +377,8 @@ addEventListener("keyup", (ev) => {
     } else if (player2.sides.isUp == true && ev.key == 'o') {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 40,
+                player2.position.y - 10,
                 10,
                 "black",
                 {
@@ -390,8 +390,8 @@ addEventListener("keyup", (ev) => {
     } else if (player2.sides.isDown == true && ev.key == 'o') {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 45,
+                player2.position.y + 70,
                 10,
                 "black",
                 {
