@@ -44,46 +44,44 @@ class Player {
             isRight: true,
         };
 
-        const down1 = new Image()
-        down1.src = './Sprites/Baixo1.png'
-        this.down1 = down1
+        const down1 = new Image();
+        down1.src = "./Sprites/Baixo1.png";
+        this.down1 = down1;
 
-        const right1 = new Image()
-        right1.src = './Sprites/Direita1.png'
-        this.right1 = right1
+        const right1 = new Image();
+        right1.src = "./Sprites/Direita1.png";
+        this.right1 = right1;
 
-        const up1 = new Image()
-        up1.src = './Sprites/Cima1.png'
-        this.up1 = up1
+        const up1 = new Image();
+        up1.src = "./Sprites/Cima1.png";
+        this.up1 = up1;
 
-        const left1 = new Image()
-        left1.src = './Sprites/Esquerda1.png'
-        this.left1 = left1
+        const left1 = new Image();
+        left1.src = "./Sprites/Esquerda1.png";
+        this.left1 = left1;
 
         this.color = color;
-        
     }
 
-    async draw() {
-        if(this.sides.isDown == true){
-            c.drawImage(this.down1, this.position.x, this.position.y, 80, 80)
-        } else if(this.sides.isRight == true){
-            c.drawImage(this.right1, this.position.x, this.position.y, 80, 80)
-        } else if(this.sides.isUp == true){
-            c.drawImage(this.up1, this.position.x, this.position.y, 80, 80)
-        } else if(this.sides.isLeft == true){
-            c.drawImage(this.left1, this.position.x, this.position.y, 80, 80)
+    draw() {
+        if (this.sides.isDown == true) {
+            c.drawImage(this.down1, this.position.x, this.position.y, 80, 80);
+        } else if (this.sides.isRight == true) {
+            c.drawImage(this.right1, this.position.x, this.position.y, 80, 80);
+        } else if (this.sides.isUp == true) {
+            c.drawImage(this.up1, this.position.x, this.position.y, 80, 80);
+        } else if (this.sides.isLeft == true) {
+            c.drawImage(this.left1, this.position.x, this.position.y, 80, 80);
         }
     }
 
     update() {
         this.draw();
-        
+
         this.position.y += this.velocity.y;
         this.position.x += this.velocity.x;
-
-}}
-
+    }
+}
 
 class Projectile {
     constructor(x, y, radius, color, velocity) {
@@ -108,6 +106,26 @@ class Projectile {
     }
 }
 
+class Enemy {
+    constructor(x, y, color, velocity) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.velocity = velocity;
+    }
+
+    draw() {
+        c.fillStyle = this.color;
+        c.fillRect(this.x, this.y, 30, 30);
+    }
+
+    update() {
+        this.draw();
+        this.x = this.x + this.velocity.x;
+        this.y = this.y + this.velocity.y;
+    }
+}
+
 const player1 = new Player("blue", canvas.width / 2 - 40, canvas.height / 2);
 
 const player2 = new Player("green", canvas.width / 2 + 40, canvas.height / 2);
@@ -118,7 +136,7 @@ const keys1 = {
     },
     left: {
         pressed: false,
-    }
+    },
 };
 
 const keys2 = {
@@ -132,8 +150,30 @@ const keys2 = {
 
 const projectiles1 = [];
 const projectiles2 = [];
+const enemies = [];
 
-let animationId
+function spawnEnemies() {
+    setInterval(() => {
+        let x;
+        let y;
+        if (Math.random() < 0.5) {
+            x = Math.random() < 0.5 ? 0 - 20 : canvas.width + 20;
+            y = Math.random() * canvas.height;
+        } else {
+            x = Math.random() * canvas.width;
+            y = Math.random() < 0.5 ? 0 - 20 : canvas.height + 20;
+        }
+        const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
+
+        const velocity = {
+            x: Math.cos(angle),
+            y: Math.sin(angle),
+        };
+        enemies.push(new Enemy(x, y, "red", velocity));
+    }, 1500);
+}
+
+let animationId;
 function animate() {
     animationId = requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas.width, canvas.height);
@@ -146,21 +186,18 @@ function animate() {
         proj.update();
     });
 
-    projectiles1.forEach((proj) => {
-        const dist1 = Math.hypot(proj.x - (player2.position.x + 15), proj.y - (player2.position.y + 15))
-        //console.log(dist1)
-        if(dist1 - proj.radius < 1){
-            //cancelAnimationFrame(animationId)
-        }
-    })
+    enemies.forEach((enemy, enemyIndex) => {
+        enemy.update();
 
-    projectiles2.forEach((proj) => {
-        const dist2 = Math.hypot(proj.x - (player1.position.x + 15), proj.y - (player1.position.y + 15))
-        //console.log(dist1)
-        if(dist2 - proj.radius < 5){
-            //cancelAnimationFrame(animationId)
-        }
-    })
+        projectiles1.forEach((projectile, projIndex) => {
+            const dist1 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+            console.log(dist1)
+            if (dist1 < 30){
+                projectiles1.splice(projIndex, 1)
+                enemies.splice(enemyIndex, 1)
+            }
+        });
+    });
 
     //BUG
 
@@ -168,7 +205,7 @@ function animate() {
         player1.velocity.x = 5;
     } else if (keys1.left.pressed && player1.position.x >= 0) {
         player1.velocity.x = -5;
-    } 
+    }
 
     if (keys2.right.pressed && player2.position.x + player2.width <= 800) {
         player2.velocity.x = 5;
@@ -209,7 +246,7 @@ addEventListener("keydown", (ev) => {
             break;
         case 83:
             console.log("baixo");
-            
+
             player1.velocity.y = 5;
             player1.sides.isDown = true;
             player1.sides.isRight = false;
@@ -348,7 +385,7 @@ addEventListener("keyup", (ev) => {
             )
         );
     }
-    if (player2.sides.isLeft == true && ev.key == 'o') {
+    if (player2.sides.isLeft == true && ev.key == "o") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 25,
@@ -361,7 +398,7 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isRight == true && ev.key == 'o') {
+    } else if (player2.sides.isRight == true && ev.key == "o") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 50,
@@ -374,7 +411,7 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isUp == true && ev.key == 'o') {
+    } else if (player2.sides.isUp == true && ev.key == "o") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 40,
@@ -387,7 +424,7 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isDown == true && ev.key == 'o') {
+    } else if (player2.sides.isDown == true && ev.key == "o") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 45,
@@ -404,3 +441,4 @@ addEventListener("keyup", (ev) => {
 });
 
 animate();
+spawnEnemies();
