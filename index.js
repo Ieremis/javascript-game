@@ -181,14 +181,17 @@ function animate() {
     player2.update();
     projectiles1.forEach((proj, projIndex) => {
         proj.update();
-        console.log(projectiles1)
         //removendo dos cantos do canvas
         if(proj.x < 0 || proj.x > canvas.width || proj.y < 0 || proj.y > canvas.height){
             projectiles1.splice(projIndex, 1)
         }
     });
-    projectiles2.forEach((proj) => {
+    projectiles2.forEach((proj, projIndex) => {
         proj.update();
+        //removendo dos cantos do canvas
+        if(proj.x < 0 || proj.x > canvas.width || proj.y < 0 || proj.y > canvas.height){
+            projectiles2.splice(projIndex, 1)
+        }
     });
 
     enemies.forEach((enemy, enemyIndex) => {
@@ -198,9 +201,16 @@ function animate() {
         }
         projectiles1.forEach((projectile, projIndex) => {
             const dist1 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
-            console.log(dist1)
             if (dist1 < 30){
                 projectiles1.splice(projIndex, 1)
+                enemies.splice(enemyIndex, 1)
+            }
+        });
+
+        projectiles2.forEach((projectile, projIndex) => {
+            const dist2 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+            if (dist2 < 30){
+                projectiles2.splice(projIndex, 1)
                 enemies.splice(enemyIndex, 1)
             }
         });
@@ -392,7 +402,7 @@ addEventListener("keyup", (ev) => {
             )
         );
     }
-    if (player2.sides.isLeft == true && ev.key == "o") {
+    if (player2.sides.isLeft == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 25,
@@ -405,7 +415,7 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isRight == true && ev.key == "o") {
+    } else if (player2.sides.isRight == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 50,
@@ -418,7 +428,7 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isUp == true && ev.key == "o") {
+    } else if (player2.sides.isUp == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 40,
@@ -431,7 +441,7 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isDown == true && ev.key == "o") {
+    } else if (player2.sides.isDown == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
                 player2.position.x + 45,
