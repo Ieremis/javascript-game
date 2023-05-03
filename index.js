@@ -179,8 +179,13 @@ function animate() {
     c.clearRect(0, 0, canvas.width, canvas.height);
     player1.update();
     player2.update();
-    projectiles1.forEach((proj) => {
+    projectiles1.forEach((proj, projIndex) => {
         proj.update();
+        console.log(projectiles1)
+        //removendo dos cantos do canvas
+        if(proj.x < 0 || proj.x > canvas.width || proj.y < 0 || proj.y > canvas.height){
+            projectiles1.splice(projIndex, 1)
+        }
     });
     projectiles2.forEach((proj) => {
         proj.update();
@@ -188,7 +193,9 @@ function animate() {
 
     enemies.forEach((enemy, enemyIndex) => {
         enemy.update();
-
+        if(enemy.x <= -20 || enemy.x >= canvas.width + 20 || enemy.y <= -20 || enemy.y >= canvas.height + 20){
+            enemies.splice(enemyIndex, 1);
+        }
         projectiles1.forEach((projectile, projIndex) => {
             const dist1 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
             console.log(dist1)
