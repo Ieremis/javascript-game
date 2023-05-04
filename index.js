@@ -22,11 +22,7 @@
 
 // [ ]: Adicionar efeitos sonoros
 
-const canvas = document.querySelector("canvas"); // acessando o canvas do html
-const c = canvas.getContext("2d"); // pegando o context 2d do canvas
-
-canvas.width = 800;
-canvas.height = 600;
+let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies;
 
 class Player {
     constructor(color, positionX, positionY) {
@@ -131,32 +127,6 @@ class Enemy {
         this.y = this.y + this.velocity.y;
     }
 }
-
-const player1 = new Player("blue", canvas.width / 2 - 100, canvas.height / 2);
-
-const player2 = new Player("green", canvas.width / 2 + 40, canvas.height / 2);
-
-const keys1 = {
-    right: {
-        pressed: false,
-    },
-    left: {
-        pressed: false,
-    },
-};
-
-const keys2 = {
-    right: {
-        pressed: false,
-    },
-    left: {
-        pressed: false,
-    },
-};
-
-const projectiles1 = [];
-const projectiles2 = [];
-const enemies = [];
 
 function spawnEnemies() {
     setInterval(() => {
@@ -489,5 +459,40 @@ addEventListener("keyup", (ev) => {
     }
 });
 
-animate();
-spawnEnemies();
+function main(){
+    canvas = document.querySelector("canvas"); // acessando o canvas do html
+    c = canvas.getContext("2d"); // pegando o context 2d do canvas
+    
+    canvas.width = 800;
+    canvas.height = 600;
+
+    player1 = new Player("blue", canvas.width / 2 - 100, canvas.height / 2);
+
+    player2 = new Player("green", canvas.width / 2 + 40, canvas.height / 2);
+
+    keys1 = {
+        right: {
+            pressed: false,
+        },
+        left: {
+            pressed: false,
+        },
+    };
+    
+    keys2 = {
+        right: {
+            pressed: false,
+        },
+        left: {
+            pressed: false,
+        },
+    };
+    
+    projectiles1 = [];
+    projectiles2 = [];
+    enemies = [];
+    animate();
+    spawnEnemies();
+}
+
+main()
