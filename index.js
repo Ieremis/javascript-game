@@ -22,7 +22,13 @@
 
 // [ ]: Adicionar efeitos sonoros
 
-let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies;
+let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies, estadoAtual;
+
+let estados = {
+        jogar: 0,
+        jogando: 1,
+        perdeu: 2
+}
 
 class Player {
     constructor(color, positionX, positionY) {
@@ -217,8 +223,6 @@ function animate() {
         }
     });
 
-    //BUG
-
     if (keys1.right.pressed && player1.position.x + player1.width <= 800) {
         player1.velocity.x = 5;
     } else if (keys1.left.pressed && player1.position.x >= 0) {
@@ -232,8 +236,6 @@ function animate() {
     }
     //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); -> debug do tamanho do player
 }
-
-// BUG
 
 addEventListener("keydown", (ev) => {
     switch (ev.keyCode) {
@@ -459,6 +461,11 @@ addEventListener("keyup", (ev) => {
     }
 });
 
+function drawMenu(){
+    c.fillStyle = "black"
+	c.fillRect(0, 0, canvas.width, canvas.height);
+}
+
 function main(){
     canvas = document.querySelector("canvas"); // acessando o canvas do html
     c = canvas.getContext("2d"); // pegando o context 2d do canvas
@@ -491,8 +498,16 @@ function main(){
     projectiles1 = [];
     projectiles2 = [];
     enemies = [];
-    animate();
-    spawnEnemies();
+    /* window.addEventListener("click", () => {
+        estadoAtual = estados.jogando;
+    })
+    if(estadoAtual == estados.jogar){
+        drawMenu()
+    } else if (estadoAtual == estados.jogando){
+        animate();
+        spawnEnemies();
+    } */
+    
 }
 
 main()
