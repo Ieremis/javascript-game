@@ -10,12 +10,18 @@ A fazer:
 
 // [ ]: Programar as colisões
 
-// [ ]: Programar os inimigos
+// [ ]: Programar o score
 
-// [ ]: Adicionar um segundo personagem
+// [x]: Programar os inimigos
 
-// [ ]: Colisão do player1 com o canvas
+// [x]: Adicionar um segundo personagem
+
+// [ ]: Programar menu/UI do jogo
+
+// [ ]: Colisão dos players com o canvas
 
 // [ ]: Trocar os sprites
 
 // [ ]: Adicionar músicas
+
+// [ ]: Adicionar efeitos sonoros

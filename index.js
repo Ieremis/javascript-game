@@ -6,15 +6,21 @@
 
 // [ ]: Programar as colisões
 
-// [ ]: Programar os inimigos
+// [ ]: Programar o score
 
-// [ ]: Adicionar um segundo personagem
+// [x]: Programar os inimigos
 
-// [ ]: Colisão do player1 com o canvas
+// [x]: Adicionar um segundo personagem
+
+// [ ]: Programar menu/UI do jogo
+
+// [ ]: Colisão dos players com o canvas
 
 // [ ]: Trocar os sprites
 
 // [ ]: Adicionar músicas
+
+// [ ]: Adicionar efeitos sonoros
 
 const canvas = document.querySelector("canvas"); // acessando o canvas do html
 const c = canvas.getContext("2d"); // pegando o context 2d do canvas
@@ -34,8 +40,8 @@ class Player {
             y: 0,
         };
 
-        this.width = 20;
-        this.height = 20;
+        this.width = 75;
+        this.height = 80;
 
         this.sides = {
             isUp: false,
@@ -126,7 +132,7 @@ class Enemy {
     }
 }
 
-const player1 = new Player("blue", canvas.width / 2 - 40, canvas.height / 2);
+const player1 = new Player("blue", canvas.width / 2 - 100, canvas.height / 2);
 
 const player2 = new Player("green", canvas.width / 2 + 40, canvas.height / 2);
 
@@ -228,9 +234,8 @@ function animate() {
         player2.velocity.x = 5;
     } else if (keys2.left.pressed && player2.position.x >= 0) {
         player2.velocity.x = -5;
-    } else {
-        player2.velocity.x = 0;
-    }
+    } 
+    //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); -> debug do tamanho do player
 }
 
 // BUG
