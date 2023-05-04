@@ -188,38 +188,63 @@ function animate() {
     projectiles1.forEach((proj, projIndex) => {
         proj.update();
         //removendo dos cantos do canvas
-        if(proj.x < 0 || proj.x > canvas.width || proj.y < 0 || proj.y > canvas.height){
-            projectiles1.splice(projIndex, 1)
+        if (
+            proj.x < 0 ||
+            proj.x > canvas.width ||
+            proj.y < 0 ||
+            proj.y > canvas.height
+        ) {
+            projectiles1.splice(projIndex, 1);
         }
     });
     projectiles2.forEach((proj, projIndex) => {
         proj.update();
         //removendo dos cantos do canvas
-        if(proj.x < 0 || proj.x > canvas.width || proj.y < 0 || proj.y > canvas.height){
-            projectiles2.splice(projIndex, 1)
+        if (
+            proj.x < 0 ||
+            proj.x > canvas.width ||
+            proj.y < 0 ||
+            proj.y > canvas.height
+        ) {
+            projectiles2.splice(projIndex, 1);
         }
     });
 
     enemies.forEach((enemy, enemyIndex) => {
         enemy.update();
-        if(enemy.x <= -20 || enemy.x >= canvas.width + 20 || enemy.y <= -20 || enemy.y >= canvas.height + 20){
+        if (
+            enemy.x <= -20 ||
+            enemy.x >= canvas.width + 20 ||
+            enemy.y <= -20 ||
+            enemy.y >= canvas.height + 20
+        ) {
             enemies.splice(enemyIndex, 1);
         }
         projectiles1.forEach((projectile, projIndex) => {
             const dist1 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
-            if (dist1 < 30){
-                projectiles1.splice(projIndex, 1)
-                enemies.splice(enemyIndex, 1)
+            if (dist1 < 30) {
+                projectiles1.splice(projIndex, 1);
+                enemies.splice(enemyIndex, 1);
             }
         });
 
         projectiles2.forEach((projectile, projIndex) => {
             const dist2 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
-            if (dist2 < 30){
-                projectiles2.splice(projIndex, 1)
-                enemies.splice(enemyIndex, 1)
+            if (dist2 < 30) {
+                projectiles2.splice(projIndex, 1);
+                enemies.splice(enemyIndex, 1);
             }
         });
+
+        const dist1 = Math.hypot(enemy.x - player1.position.x - 30, enemy.y - player1.position.y - 30);
+        if (dist1 < 50) {
+            enemies.splice(enemyIndex, 1);
+        }
+
+        const dist2 = Math.hypot(enemy.x - player2.position.x - 30, enemy.y - player2.position.y - 30);
+        if (dist2 < 50) {
+            enemies.splice(enemyIndex, 1);
+        }
     });
 
     //BUG
@@ -234,7 +259,7 @@ function animate() {
         player2.velocity.x = 5;
     } else if (keys2.left.pressed && player2.position.x >= 0) {
         player2.velocity.x = -5;
-    } 
+    }
     //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); -> debug do tamanho do player
 }
 
@@ -335,6 +360,7 @@ addEventListener("keyup", (ev) => {
         case 37:
             console.log("esquerda");
             keys2.left.pressed = false;
+            player2.velocity.x = 0;
             break;
         case 38:
             console.log("cima");
@@ -343,6 +369,7 @@ addEventListener("keyup", (ev) => {
         case 39:
             console.log("direita");
             keys2.right.pressed = false;
+            player2.velocity.x = 0;
             break;
         case 40:
             console.log("baixo");
