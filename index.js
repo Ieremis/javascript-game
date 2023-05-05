@@ -24,7 +24,8 @@
 
 const canvas = document.querySelector("canvas"); // acessando o canvas do html
 const c = canvas.getContext("2d"); // pegando o context 2d do canvas
-
+const background = new Image();
+background.src = "./Sprites/background.jpeg"
 canvas.width = 800;
 canvas.height = 600;
 
@@ -118,17 +119,24 @@ class Enemy {
         this.y = y;
         this.color = color;
         this.velocity = velocity;
+        this.width = 75;
+        this.height = 80;
+        const zombie1 = new Image();
+        zombie1.src = "./Sprites/Zumbi1.png";
+        this.zombie1 = zombie1;
     }
 
     draw() {
-        c.fillStyle = this.color;
-        c.fillRect(this.x, this.y, 30, 30);
+        /* c.fillStyle = this.color;
+        c.fillRect(this.x, this.y, 30, 30); */
+        c.drawImage(this.zombie1, this.x, this.y, 80, 80)
     }
 
     update() {
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
+        c.strokeRect(this.x, this.y, this.width, this.height)
     }
 }
 
@@ -183,6 +191,7 @@ let animationId;
 function animate() {
     animationId = requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas.width, canvas.height);
+    c.drawImage(background, 0, 0, canvas.width, canvas.height);
     player1.update();
     player2.update();
     projectiles1.forEach((proj, projIndex) => {
@@ -221,7 +230,7 @@ function animate() {
             enemies.splice(enemyIndex, 1);
         }
         projectiles1.forEach((projectile, projIndex) => {
-            const dist1 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+            const dist1 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
             if (dist1 < 30) {
                 projectiles1.splice(projIndex, 1);
                 enemies.splice(enemyIndex, 1);
@@ -229,20 +238,20 @@ function animate() {
         });
 
         projectiles2.forEach((projectile, projIndex) => {
-            const dist2 = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
+            const dist2 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
             if (dist2 < 30) {
                 projectiles2.splice(projIndex, 1);
                 enemies.splice(enemyIndex, 1);
             }
         });
 
-        const dist1 = Math.hypot(enemy.x - player1.position.x - 30, enemy.y - player1.position.y - 30);
-        if (dist1 < 50) {
+        const dist1 = Math.hypot(enemy.x - player1.position.x, enemy.y - player1.position.y + 10);
+        if (dist1 < 60) {
             enemies.splice(enemyIndex, 1);
         }
 
-        const dist2 = Math.hypot(enemy.x - player2.position.x - 30, enemy.y - player2.position.y - 30);
-        if (dist2 < 50) {
+        const dist2 = Math.hypot(enemy.x - player2.position.x, enemy.y - player2.position.y + 10);
+        if (dist2 < 60) {
             enemies.splice(enemyIndex, 1);
         }
     });
@@ -260,7 +269,7 @@ function animate() {
     } else if (keys2.left.pressed && player2.position.x >= 0) {
         player2.velocity.x = -5;
     }
-    //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); -> debug do tamanho do player
+    c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); //-> debug do tamanho do player
 }
 
 // BUG
