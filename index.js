@@ -22,7 +22,9 @@
 
 // [ ]: Adicionar efeitos sonoros
 
-let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies, estadoAtual, startGameBtn = document.getElementById("startGameBtn");
+let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies, estadoAtual, 
+startGameBtn = document.getElementById("startGameBtn"),
+menu = document.getElementById("menu");
 
 let estados = {
         jogar: 0,
@@ -464,6 +466,7 @@ addEventListener("keyup", (ev) => {
 });
 
 startGameBtn.addEventListener("click", () => {
+    menu.style.display = "none"
     estadoAtual = estados.jogando
 })
 
