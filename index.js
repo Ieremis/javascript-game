@@ -136,7 +136,7 @@ class Enemy {
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
-        c.strokeRect(this.x, this.y, this.width, this.height)
+        //c.strokeRect(this.x, this.y, this.width, this.height) debug
     }
 }
 
@@ -269,7 +269,7 @@ function animate() {
     } else if (keys2.left.pressed && player2.position.x >= 0) {
         player2.velocity.x = -5;
     }
-    c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); //-> debug do tamanho do player
+    //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); //-> debug do tamanho do player
 }
 
 // BUG
