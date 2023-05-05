@@ -24,7 +24,8 @@
 
 let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, background, enemies, estadoAtual, 
 startGameBtn = document.getElementById("startGameBtn"),
-menu = document.getElementById("menu");
+menu = document.getElementById("menu"),
+mortes = 0;
 
 let estados = {
         jogar: 0,
@@ -87,7 +88,6 @@ class Player {
 
     update() {
         this.draw();
-
         this.position.y += this.velocity.y;
         this.position.x += this.velocity.x;
     }
@@ -227,11 +227,21 @@ function animate() {
         const dist1 = Math.hypot(enemy.x - player1.position.x, enemy.y - player1.position.y + 10);
         if (dist1 < 60) {
             enemies.splice(enemyIndex, 1);
+            mortes++;
+            if(mortes == 2){
+                estadoAtual = estados.perdeu;
+                enemies.splice(enemyIndex);
+            }
         }
 
         const dist2 = Math.hypot(enemy.x - player2.position.x, enemy.y - player2.position.y + 10);
         if (dist2 < 60) {
             enemies.splice(enemyIndex, 1);
+            mortes++;
+            if(mortes == 2){
+                estadoAtual = estados.perdeu;
+                enemies.splice(enemyIndex);
+            }
         }
     });
 
