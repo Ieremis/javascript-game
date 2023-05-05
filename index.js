@@ -22,7 +22,7 @@
 
 // [ ]: Adicionar efeitos sonoros
 
-let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies, estadoAtual;
+let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies, estadoAtual, startGameBtn = document.getElementById("startGameBtn");
 
 let estados = {
         jogar: 0,
@@ -151,7 +151,9 @@ function spawnEnemies() {
             x: Math.cos(angle),
             y: Math.sin(angle),
         };
-        enemies.push(new Enemy(x, y, "red", velocity));
+        if(estadoAtual == estados.jogando){
+            enemies.push(new Enemy(x, y, "red", velocity));
+        }
     }, 1500);
 }
 
@@ -461,15 +463,13 @@ addEventListener("keyup", (ev) => {
     }
 });
 
-function drawMenu(){
-    c.fillStyle = "black"
-	c.fillRect(0, 0, canvas.width, canvas.height);
-}
+startGameBtn.addEventListener("click", () => {
+    estadoAtual = estados.jogando
+})
 
 function main(){
     canvas = document.querySelector("canvas"); // acessando o canvas do html
     c = canvas.getContext("2d"); // pegando o context 2d do canvas
-    
     canvas.width = 800;
     canvas.height = 600;
 
@@ -498,15 +498,10 @@ function main(){
     projectiles1 = [];
     projectiles2 = [];
     enemies = [];
-    /* window.addEventListener("click", () => {
-        estadoAtual = estados.jogando;
-    })
-    if(estadoAtual == estados.jogar){
-        drawMenu()
-    } else if (estadoAtual == estados.jogando){
-        animate();
-        spawnEnemies();
-    } */
+    estadoAtual = estados.jogar
+    animate();
+    spawnEnemies();
+
     
 }
 

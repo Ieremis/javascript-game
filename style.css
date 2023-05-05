@@ -12,3 +12,17 @@ canvas{
     margin: auto;
     border: 2px solid black;
 }
+
+
+#menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    height: 100vh;
+}
+
+#startGameBtn{
+    position: absolute;
+    z-index: 2;
+}
