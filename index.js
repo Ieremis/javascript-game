@@ -22,7 +22,7 @@
 
 // [ ]: Adicionar efeitos sonoros
 
-let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, enemies, estadoAtual, 
+let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, background, enemies, estadoAtual, 
 startGameBtn = document.getElementById("startGameBtn"),
 menu = document.getElementById("menu");
 
@@ -152,7 +152,7 @@ function spawnEnemies() {
             y = Math.random() * canvas.height;
         } else {
             x = Math.random() * canvas.width;
-            y = Math.random() < 0.5 ? 0 - 20 : canvas.height + 20;
+            y = Math.random() < 0.5 ? 0 - 40 : canvas.height + 40;
         }
         const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
 
@@ -203,8 +203,8 @@ function animate() {
         if (
             enemy.x <= -20 ||
             enemy.x >= canvas.width + 20 ||
-            enemy.y <= -20 ||
-            enemy.y >= canvas.height + 20
+            enemy.y <= -50 ||
+            enemy.y >= canvas.height + 50
         ) {
             enemies.splice(enemyIndex, 1);
         }
@@ -483,6 +483,9 @@ function main(){
     c = canvas.getContext("2d"); // pegando o context 2d do canvas
     canvas.width = 800;
     canvas.height = 600;
+
+    background = new Image();
+    background.src = "./Sprites/background.jpeg"
 
     player1 = new Player("blue", canvas.width / 2 - 100, canvas.height / 2);
 
