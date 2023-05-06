@@ -25,6 +25,9 @@
 let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, background, enemies, estadoAtual, 
 startGameBtn = document.getElementById("startGameBtn"),
 menu = document.getElementById("menu"),
+gameOver = document.getElementById("gameOverMenu"),
+backToMenuBtn = document.getElementById("backToMenuBtn"),
+resetCount = 0,
 mortes = 0;
 
 let estados = {
@@ -87,9 +90,11 @@ class Player {
     }
 
     update() {
-        this.draw();
-        this.position.y += this.velocity.y;
-        this.position.x += this.velocity.x;
+        if(estadoAtual == estados.jogando){
+            this.draw();
+            this.position.y += this.velocity.y;
+            this.position.x += this.velocity.x;
+        }
     }
 }
 
@@ -144,27 +149,27 @@ class Enemy {
 }
 
 function spawnEnemies() {
-    setInterval(() => {
-        let x;
-        let y;
-        if (Math.random() < 0.5) {
-            x = Math.random() < 0.5 ? 0 - 20 : canvas.width + 20;
-            y = Math.random() * canvas.height;
-        } else {
-            x = Math.random() * canvas.width;
-            y = Math.random() < 0.5 ? 0 - 40 : canvas.height + 40;
-        }
-        const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
-
-        const velocity = {
-            x: Math.cos(angle),
-            y: Math.sin(angle),
-        };
-        if(estadoAtual == estados.jogando){
-            enemies.push(new Enemy(x, y, "red", velocity));
-        }
-    }, 1500);
-}
+        setInterval(() => {
+            if(estadoAtual == estados.jogando){
+            let x;
+            let y;
+            if (Math.random() < 0.5) {
+                x = Math.random() < 0.5 ? 0 - 20 : canvas.width + 20;
+                y = Math.random() * canvas.height;
+            } else {
+                x = Math.random() * canvas.width;
+                y = Math.random() < 0.5 ? 0 - 40 : canvas.height + 40;
+            }
+            const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
+    
+            const velocity = {
+                x: Math.cos(angle),
+                y: Math.sin(angle),
+            };
+                enemies.push(new Enemy(x, y, "red", velocity));
+            }
+        }, 1500);
+    }
 
 let animationId;
 function animate() {
@@ -231,6 +236,8 @@ function animate() {
             if(mortes == 2){
                 estadoAtual = estados.perdeu;
                 enemies.splice(enemyIndex);
+                gameOver.style.display = "flex"
+                mortes = 0;
             }
         }
 
@@ -241,6 +248,8 @@ function animate() {
             if(mortes == 2){
                 estadoAtual = estados.perdeu;
                 enemies.splice(enemyIndex);
+                gameOver.style.display = "flex"
+                mortes = 0;
             }
         }
     });
@@ -256,7 +265,9 @@ function animate() {
     } else if (keys2.left.pressed && player2.position.x >= 0) {
         player2.velocity.x = -5;
     }
+
     //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); //-> debug do tamanho do player
+    console.log(enemies)
 }
 
 addEventListener("keydown", (ev) => {
@@ -486,6 +497,21 @@ addEventListener("keyup", (ev) => {
 startGameBtn.addEventListener("click", () => {
     menu.style.display = "none"
     estadoAtual = estados.jogando
+    player1.position.x = canvas.width / 2 - 100;
+    player1.position.y = canvas.height / 2;
+    player2.position.x = canvas.width / 2 + 40;
+    player2.position.y = canvas.height / 2;
+
+    if(resetCount < 1){
+        spawnEnemies()
+    }
+})
+
+backToMenuBtn.addEventListener("click", () => {
+    gameOver.style.display = "none"
+    menu.style.display = "flex"
+    estadoAtual = estados.jogar
+    resetCount = 1;
 })
 
 function main(){
@@ -524,9 +550,5 @@ function main(){
     enemies = [];
     estadoAtual = estados.jogar
     animate();
-    spawnEnemies();
-
-    
 }
-
 main()
