@@ -53,9 +53,9 @@ class Player {
 
         this.sides = {
             isUp: false,
-            isDown: false,
+            isDown: true,
             isLeft: false,
-            isRight: true,
+            isRight: false,
         };
 
         const down1 = new Image();
@@ -501,7 +501,6 @@ startGameBtn.addEventListener("click", () => {
     player1.position.y = canvas.height / 2;
     player2.position.x = canvas.width / 2 + 40;
     player2.position.y = canvas.height / 2;
-
     if(resetCount < 1){
         spawnEnemies()
     }

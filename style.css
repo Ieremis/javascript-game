@@ -47,26 +47,51 @@ body{
     align-items: center;
     flex-direction: column;
     background-color: black;
+
 }
 
-#score {
-    color: white;
+.scoreDiv{
+    background-color: white;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    margin-bottom: 50px;
+}
+
+.score {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    color: black;
     margin-bottom: 10px;
+    font-family: 'Sigmar', cursive;
+    font-size: 20px;
+}
+
+#scoreTitle{
+    font-family: 'Sigmar', cursive;
+    font-size: 25px;
 }
 
 .buttons{
-    width: 230px;
+    font-family : 'Sigmar', cursive;
+    width: 280px;
     height: 50px;
     border: 2px solid black;
     background-color: pink;
     transition: 150ms;
     margin-bottom: 15px;
+    font-size: 20px;
 }
 
 .buttons:hover{
-    width: 280px;
+    width: 320px;
     border-radius: 15px;
     background-color: white;
     cursor: pointer;
+    font-size: 30px;
 }
 
