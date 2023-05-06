@@ -178,6 +178,13 @@ function animate() {
     c.drawImage(background, 0, 0, canvas.width, canvas.height);
     player1.update();
     player2.update();
+    c.fillStyle = "#ffffff"
+    c.globalAlpha = 0.6;
+    c.fillRect(5, 2, 310, 40)
+    c.globalAlpha = 1.0;
+    c.fillStyle = "#c53fab"
+    c.fillText("SCORE PLAYER 1: " + player1.score, 10, 30);
+    c.fillText("SCORE PLAYER 2: " + player2.score, 560, 30);
     projectiles1.forEach((proj, projIndex) => {
         proj.update();
         //removendo dos cantos do canvas
@@ -518,7 +525,7 @@ function main(){
     c = canvas.getContext("2d"); // pegando o context 2d do canvas
     canvas.width = 800;
     canvas.height = 600;
-
+    c.font = "20px Sigmar";
     background = new Image();
     background.src = "./Sprites/background.jpeg"
 
