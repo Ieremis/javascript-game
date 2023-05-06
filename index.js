@@ -6,21 +6,37 @@
 
 // [ ]: Programar as colisões
 
-// [ ]: Programar os inimigos
+// [ ]: Programar o score
 
-// [ ]: Adicionar um segundo personagem
+// [x]: Programar os inimigos
 
-// [ ]: Colisão do player1 com o canvas
+// [x]: Adicionar um segundo personagem
+
+// [ ]: Programar menu/UI do jogo
+
+// [ ]: Colisão dos players com o canvas
 
 // [ ]: Trocar os sprites
 
 // [ ]: Adicionar músicas
 
-const canvas = document.querySelector("canvas"); // acessando o canvas do html
-const c = canvas.getContext("2d"); // pegando o context 2d do canvas
+// [ ]: Adicionar efeitos sonoros
 
-canvas.width = 800;
-canvas.height = 600;
+let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, background, enemies, estadoAtual, 
+startGameBtn = document.getElementById("startGameBtn"),
+menu = document.getElementById("menu"),
+gameOver = document.getElementById("gameOverMenu"),
+backToMenuBtn = document.getElementById("backToMenuBtn"),
+resetCount = 0,
+scorePointsHtml1 = document.getElementById("scorePoints1"),
+scorePointsHtml2 = document.getElementById("scorePoints2"),
+mortes = 0;
+
+let estados = {
+        jogar: 0,
+        jogando: 1,
+        perdeu: 2
+}
 
 class Player {
     constructor(color, positionX, positionY) {
@@ -34,32 +50,56 @@ class Player {
             y: 0,
         };
 
-        this.width = 30;
-        this.height = 30;
+        this.width = 75;
+        this.height = 80;
 
         this.sides = {
             isUp: false,
-            isDown: false,
+            isDown: true,
             isLeft: false,
-            isRight: true,
+            isRight: false,
         };
+
+        const down1 = new Image();
+        down1.src = "./Sprites/Baixo1.png";
+        this.down1 = down1;
+
+        const right1 = new Image();
+        right1.src = "./Sprites/Direita1.png";
+        this.right1 = right1;
+
+        const up1 = new Image();
+        up1.src = "./Sprites/Cima1.png";
+        this.up1 = up1;
+
+        const left1 = new Image();
+        left1.src = "./Sprites/Esquerda1.png";
+        this.left1 = left1;
 
         this.color = color;
         this.score = 0;
     }
 
     draw() {
-        c.fillStyle = this.color;
-        c.fillRect(this.position.x, this.position.y, this.width, this.height);
+        if (this.sides.isDown == true) {
+            c.drawImage(this.down1, this.position.x, this.position.y, 80, 80);
+        } else if (this.sides.isRight == true) {
+            c.drawImage(this.right1, this.position.x, this.position.y, 80, 80);
+        } else if (this.sides.isUp == true) {
+            c.drawImage(this.up1, this.position.x, this.position.y, 80, 80);
+        } else if (this.sides.isLeft == true) {
+            c.drawImage(this.left1, this.position.x, this.position.y, 80, 80);
+        }
     }
 
     update() {
-        this.draw();
-        this.position.y += this.velocity.y;
-        this.position.x += this.velocity.x;
-
-}}
-
+        if(estadoAtual == estados.jogando){
+            this.draw();
+            this.position.y += this.velocity.y;
+            this.position.x += this.velocity.x;
+        }
+    }
+}
 
 class Projectile {
     constructor(x, y, radius, color, velocity) {
@@ -84,90 +124,166 @@ class Projectile {
     }
 }
 
-const player1 = new Player("blue", canvas.width / 2 - 40, canvas.height / 2);
-
-const player2 = new Player("green", canvas.width / 2 + 40, canvas.height / 2);
-
-const keys1 = {
-    right: {
-        pressed: false,
-    },
-    left: {
-        pressed: false,
-    },
-    up: {
-        pressed: false,
-    },
-    down: {
-        pressed: false,
+class Enemy {
+    constructor(x, y, color, velocity) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.velocity = velocity;
+        this.width = 75;
+        this.height = 80;
+        const zombie1 = new Image();
+        zombie1.src = "./Sprites/Zumbi1.png";
+        this.zombie1 = zombie1;
     }
-};
 
-const keys2 = {
-    right: {
-        pressed: false,
-    },
-    left: {
-        pressed: false,
-    },
-};
+    draw() {
+        /* c.fillStyle = this.color;
+        c.fillRect(this.x, this.y, 30, 30); */
+        c.drawImage(this.zombie1, this.x, this.y, 80, 80)
+    }
 
-const projectiles1 = [];
-const projectiles2 = [];
+    update() {
+        this.draw();
+        this.x = this.x + this.velocity.x;
+        this.y = this.y + this.velocity.y;
+        //c.strokeRect(this.x, this.y, this.width, this.height) debug
+    }
+}
 
-let animationId
+function spawnEnemies() {
+        setInterval(() => {
+            if(estadoAtual == estados.jogando){
+            let x;
+            let y;
+            if (Math.random() < 0.5) {
+                x = Math.random() < 0.5 ? 0 - 20 : canvas.width + 20;
+                y = Math.random() * canvas.height;
+            } else {
+                x = Math.random() * canvas.width;
+                y = Math.random() < 0.5 ? 0 - 40 : canvas.height + 40;
+            }
+            const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
+    
+            const velocity = {
+                x: Math.cos(angle),
+                y: Math.sin(angle),
+            };
+                enemies.push(new Enemy(x, y, "red", velocity));
+            }
+        }, 1500);
+    }
+
+let animationId;
 function animate() {
     animationId = requestAnimationFrame(animate);
     c.clearRect(0, 0, canvas.width, canvas.height);
+    c.drawImage(background, 0, 0, canvas.width, canvas.height);
     player1.update();
     player2.update();
-    c.font = "10px Arial"
-    c.fillText("Score do player 1: " + player1.score, 10, 30);
-    c.fillText("Score do player 2: " + player2.score, 610, 30);
-    projectiles1.forEach((proj) => {
+    c.fillStyle = "#ffffff"
+    c.globalAlpha = 0.6;
+    c.fillRect(5, 2, 310, 40)
+    c.globalAlpha = 1.0;
+    c.fillStyle = "#c53fab"
+    c.fillText("SCORE PLAYER 1: " + player1.score, 10, 30);
+    c.fillText("SCORE PLAYER 2: " + player2.score, 560, 30);
+    projectiles1.forEach((proj, projIndex) => {
         proj.update();
+        //removendo dos cantos do canvas
+        if (
+            proj.x < 0 ||
+            proj.x > canvas.width ||
+            proj.y < 0 ||
+            proj.y > canvas.height
+        ) {
+            projectiles1.splice(projIndex, 1);
+        }
     });
-    projectiles2.forEach((proj) => {
+    projectiles2.forEach((proj, projIndex) => {
         proj.update();
+        //removendo dos cantos do canvas
+        if (
+            proj.x < 0 ||
+            proj.x > canvas.width ||
+            proj.y < 0 ||
+            proj.y > canvas.height
+        ) {
+            projectiles2.splice(projIndex, 1);
+        }
     });
 
-    projectiles1.forEach((proj) => {
-        const dist1 = Math.hypot(proj.x - (player2.position.x + 15), proj.y - (player2.position.y + 15))
-        //console.log(dist1)
-        if(dist1 - proj.radius < 1){
-            //cancelAnimationFrame(animationId)
-            player1.score++;
+    enemies.forEach((enemy, enemyIndex) => {
+        enemy.update();
+        if (
+            enemy.x <= -20 ||
+            enemy.x >= canvas.width + 20 ||
+            enemy.y <= -50 ||
+            enemy.y >= canvas.height + 50
+        ) {
+            enemies.splice(enemyIndex, 1);
         }
-    })
+        projectiles1.forEach((projectile, projIndex) => {
+            const dist1 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
+            if (dist1 < 30) {
+                projectiles1.splice(projIndex, 1);
+                enemies.splice(enemyIndex, 1);
+                player1.score++
+            }
+        });
 
-    projectiles2.forEach((proj) => {
-        const dist2 = Math.hypot(proj.x - (player1.position.x + 15), proj.y - (player1.position.y + 15))
-        //console.log(dist1)
-        if(dist2 - proj.radius < 5){
-            //cancelAnimationFrame(animationId)
-            player2.score++;
+        projectiles2.forEach((projectile, projIndex) => {
+            const dist2 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
+            if (dist2 < 30) {
+                projectiles2.splice(projIndex, 1);
+                enemies.splice(enemyIndex, 1);
+                player2.score++
+            }
+        });
+
+        const dist1 = Math.hypot(enemy.x - player1.position.x, enemy.y - player1.position.y + 10);
+        if (dist1 < 60) {
+            enemies.splice(enemyIndex, 1);
+            mortes++;
+            if(mortes == 2){
+                estadoAtual = estados.perdeu;
+                enemies.splice(enemyIndex);
+                gameOver.style.display = "flex"
+                mortes = 0;
+            }
         }
-        
-    })
 
-    //BUG
+        const dist2 = Math.hypot(enemy.x - player2.position.x, enemy.y - player2.position.y + 10);
+        if (dist2 < 60) {
+            enemies.splice(enemyIndex, 1);
+            mortes++;
+            if(mortes == 2){
+                estadoAtual = estados.perdeu;
+                enemies.splice(enemyIndex);
+                gameOver.style.display = "flex"
+                mortes = 0;
+            }
+        }
+    });
 
     if (keys1.right.pressed && player1.position.x + player1.width <= 800) {
         player1.velocity.x = 5;
     } else if (keys1.left.pressed && player1.position.x >= 0) {
         player1.velocity.x = -5;
-    } 
+    }
 
     if (keys2.right.pressed && player2.position.x + player2.width <= 800) {
         player2.velocity.x = 5;
     } else if (keys2.left.pressed && player2.position.x >= 0) {
         player2.velocity.x = -5;
-    } else {
-        player2.velocity.x = 0;
+    }
+
+    //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); //-> debug do tamanho do player
+    if(estadoAtual == estados.perdeu){
+        scorePointsHtml1.innerHTML = player1.score;
+        scorePointsHtml2.innerHTML = player2.score;
     }
 }
-
-// BUG
 
 addEventListener("keydown", (ev) => {
     switch (ev.keyCode) {
@@ -197,7 +313,7 @@ addEventListener("keydown", (ev) => {
             break;
         case 83:
             console.log("baixo");
-            
+
             player1.velocity.y = 5;
             player1.sides.isDown = true;
             player1.sides.isRight = false;
@@ -250,7 +366,6 @@ addEventListener("keyup", (ev) => {
             break;
         case 87:
             console.log("cima");
-            keys1.up.pressed = false;
             player1.velocity.y = 0;
             break;
         case 68:
@@ -265,6 +380,7 @@ addEventListener("keyup", (ev) => {
         case 37:
             console.log("esquerda");
             keys2.left.pressed = false;
+            player2.velocity.x = 0;
             break;
         case 38:
             console.log("cima");
@@ -273,6 +389,7 @@ addEventListener("keyup", (ev) => {
         case 39:
             console.log("direita");
             keys2.right.pressed = false;
+            player2.velocity.x = 0;
             break;
         case 40:
             console.log("baixo");
@@ -287,8 +404,8 @@ addEventListener("keyup", (ev) => {
     if (player1.sides.isLeft == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 25,
+                player1.position.y + 55,
                 10,
                 "red",
                 {
@@ -300,8 +417,8 @@ addEventListener("keyup", (ev) => {
     } else if (player1.sides.isRight == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 50,
+                player1.position.y + 50,
                 10,
                 "red",
                 {
@@ -313,8 +430,8 @@ addEventListener("keyup", (ev) => {
     } else if (player1.sides.isUp == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 40,
+                player1.position.y - 10,
                 10,
                 "red",
                 {
@@ -326,8 +443,8 @@ addEventListener("keyup", (ev) => {
     } else if (player1.sides.isDown == true && ev.key == " ") {
         projectiles1.push(
             new Projectile(
-                player1.position.x + 15,
-                player1.position.y + 15,
+                player1.position.x + 45,
+                player1.position.y + 70,
                 10,
                 "red",
                 {
@@ -337,11 +454,11 @@ addEventListener("keyup", (ev) => {
             )
         );
     }
-    if (player2.sides.isLeft == true && ev.key == 'o') {
+    if (player2.sides.isLeft == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 25,
+                player2.position.y + 55,
                 10,
                 "black",
                 {
@@ -350,11 +467,11 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isRight == true && ev.key == 'o') {
+    } else if (player2.sides.isRight == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 50,
+                player2.position.y + 50,
                 10,
                 "black",
                 {
@@ -363,11 +480,11 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isUp == true && ev.key == 'o') {
+    } else if (player2.sides.isUp == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 40,
+                player2.position.y - 10,
                 10,
                 "black",
                 {
@@ -376,11 +493,11 @@ addEventListener("keyup", (ev) => {
                 }
             )
         );
-    } else if (player2.sides.isDown == true && ev.key == 'o') {
+    } else if (player2.sides.isDown == true && ev.key == "p") {
         projectiles2.push(
             new Projectile(
-                player2.position.x + 15,
-                player2.position.y + 15,
+                player2.position.x + 45,
+                player2.position.y + 70,
                 10,
                 "black",
                 {
@@ -392,5 +509,61 @@ addEventListener("keyup", (ev) => {
     }
 });
 
-animate();
+startGameBtn.addEventListener("click", () => {
+    menu.style.display = "none"
+    estadoAtual = estados.jogando
+    player1.position.x = canvas.width / 2 - 100;
+    player1.position.y = canvas.height / 2;
+    player2.position.x = canvas.width / 2 + 40;
+    player2.position.y = canvas.height / 2;
+    if(resetCount < 1){
+        spawnEnemies()
+    }
+})
+
+backToMenuBtn.addEventListener("click", () => {
+    gameOver.style.display = "none"
+    menu.style.display = "flex"
+    estadoAtual = estados.jogar
+    resetCount = 1;
+})
+
+function main(){
+    canvas = document.querySelector("canvas"); // acessando o canvas do html
+    c = canvas.getContext("2d"); // pegando o context 2d do canvas
+    canvas.width = 800;
+    canvas.height = 600;
+    c.font = "20px Sigmar";
+    background = new Image();
+    background.src = "./Sprites/background.jpeg"
+
+    player1 = new Player("blue", canvas.width / 2 - 100, canvas.height / 2);
+
+    player2 = new Player("green", canvas.width / 2 + 40, canvas.height / 2);
+
+    keys1 = {
+        right: {
+            pressed: false,
+        },
+        left: {
+            pressed: false,
+        },
+    };
+    
+    keys2 = {
+        right: {
+            pressed: false,
+        },
+        left: {
+            pressed: false,
+        },
+    };
+    
+    projectiles1 = [];
+    projectiles2 = [];
+    enemies = [];
+    estadoAtual = estados.jogar
+    animate();
+}
+main()
 

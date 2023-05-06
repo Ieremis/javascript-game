@@ -4,11 +4,33 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="./index.js" defer></script>
+    <script src="./index.js" defer type="module"></script>
     <link rel="stylesheet" href="./style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sigmar&display=swap" rel="stylesheet">
     <title>Jogo</title>
 </head>
 <body>
     <canvas></canvas>
+    <div id="menu">
+        <button id="startGameBtn" class="buttons">INICIAR JOGO</button>
+        <button id="tutoBtn" class="buttons">TUTORIAL</button>
+        <button id="creditsBtn" class="buttons">CRÉDITOS</button>
+    </div>
+
+    <div id="gameOverMenu">
+        <div class="scoreDiv">
+            <p id="scoreTitle">PONTUAÇÃO</p>
+            <p id="scoreP1" class="score">PLAYER 1: 
+                <score id="scorePoints1" class="scorePoints">0</score>
+            </p>
+            <p id="scoreP2" class="score">PLAYER 2: 
+                <score id="scorePoints2" class="scorePoints">0</score>
+            </p>
+        </div>
+        <button id="backToMenuBtn" class="buttons">VOLTAR AO MENU</button>
+    </div>
+    
 </body>
 </html>
