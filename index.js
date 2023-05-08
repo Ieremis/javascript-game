@@ -10,7 +10,7 @@
 
 // [x]: Programar os inimigos
 
-// [x]: Adicionar um segundo personagem
+// [x]: Adicionar um segun1do personagem
 
 // [ ]: Programar menu/UI do jogo
 
@@ -30,7 +30,11 @@ backToMenuBtn = document.getElementById("backToMenuBtn"),
 resetCount = 0,
 scorePointsHtml1 = document.getElementById("scorePoints1"),
 scorePointsHtml2 = document.getElementById("scorePoints2"),
-mortes = 0;
+vidas = 4, hearts, heartPos = [20, 90, 160, 230], click, 
+gun1 = new Audio('./Audio/sfx_weapon_shotgun3.mp3'), 
+gun2 = new Audio('./Audio/sfx_weapon_shotgun1.mp3'),
+damage = new Audio('./Audio/damage.mp3'),
+zombie = new Audio('./Audio/zombie-11.mp3');
 
 let estados = {
         jogar: 0,
@@ -183,11 +187,19 @@ function animate() {
     player2.update();
     c.fillStyle = "#ffffff"
     c.globalAlpha = 0.6;
-    c.fillRect(5, 2, 310, 40)
+    c.fillRect(5, 2, 235, 40)
+    c.fillStyle = "#ffffff"
+    c.globalAlpha = 0.6;
+    c.fillRect(555, 2, 235, 40)
     c.globalAlpha = 1.0;
     c.fillStyle = "#c53fab"
     c.fillText("SCORE PLAYER 1: " + player1.score, 10, 30);
     c.fillText("SCORE PLAYER 2: " + player2.score, 560, 30);
+
+    heartPos.forEach((x) => {
+        c.drawImage(hearts, x, 520, 60, 60)
+    })
+
     projectiles1.forEach((proj, projIndex) => {
         proj.update();
         //removendo dos cantos do canvas
@@ -226,6 +238,8 @@ function animate() {
         projectiles1.forEach((projectile, projIndex) => {
             const dist1 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
             if (dist1 < 30) {
+                zombie.volume = 0.2
+                zombie.play()
                 projectiles1.splice(projIndex, 1);
                 enemies.splice(enemyIndex, 1);
                 player1.score++
@@ -235,6 +249,8 @@ function animate() {
         projectiles2.forEach((projectile, projIndex) => {
             const dist2 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
             if (dist2 < 30) {
+                zombie.volume = 0.2
+                zombie.play()
                 projectiles2.splice(projIndex, 1);
                 enemies.splice(enemyIndex, 1);
                 player2.score++
@@ -244,24 +260,32 @@ function animate() {
         const dist1 = Math.hypot(enemy.x - player1.position.x, enemy.y - player1.position.y + 10);
         if (dist1 < 60) {
             enemies.splice(enemyIndex, 1);
-            mortes++;
-            if(mortes == 2){
+            damage.volume = 0.3
+            damage.play()
+            vidas--;
+            heartPos.pop();
+            if(vidas == 0){
                 estadoAtual = estados.perdeu;
                 enemies.splice(enemyIndex);
                 gameOver.style.display = "flex"
-                mortes = 0;
+                vidas = 4;
+                heartPos = [20, 90, 160, 230]
             }
         }
 
         const dist2 = Math.hypot(enemy.x - player2.position.x, enemy.y - player2.position.y + 10);
         if (dist2 < 60) {
             enemies.splice(enemyIndex, 1);
-            mortes++;
-            if(mortes == 2){
+            damage.volume = 0.3
+            damage.play()
+            vidas--;
+            heartPos.pop();
+            if(vidas == 0){
                 estadoAtual = estados.perdeu;
                 enemies.splice(enemyIndex);
                 gameOver.style.display = "flex"
-                mortes = 0;
+                vidas = 4;
+                heartPos = [20, 90, 160, 230]
             }
         }
     });
@@ -402,6 +426,9 @@ addEventListener("keyup", (ev) => {
 
 addEventListener("keyup", (ev) => {
     if (player1.sides.isLeft == true && ev.key == " ") {
+        gun1.load();
+        gun1.volume = 0.2;
+        gun1.play();
         projectiles1.push(
             new Projectile(
                 player1.position.x + 25,
@@ -415,6 +442,9 @@ addEventListener("keyup", (ev) => {
             )
         );
     } else if (player1.sides.isRight == true && ev.key == " ") {
+        gun1.load();
+        gun1.volume = 0.2;
+        gun1.play();
         projectiles1.push(
             new Projectile(
                 player1.position.x + 50,
@@ -428,6 +458,9 @@ addEventListener("keyup", (ev) => {
             )
         );
     } else if (player1.sides.isUp == true && ev.key == " ") {
+        gun1.load();
+        gun1.volume = 0.2;
+        gun1.play();
         projectiles1.push(
             new Projectile(
                 player1.position.x + 40,
@@ -441,6 +474,9 @@ addEventListener("keyup", (ev) => {
             )
         );
     } else if (player1.sides.isDown == true && ev.key == " ") {
+        gun1.load();
+        gun1.volume = 0.2;
+        gun1.play();
         projectiles1.push(
             new Projectile(
                 player1.position.x + 45,
@@ -455,6 +491,9 @@ addEventListener("keyup", (ev) => {
         );
     }
     if (player2.sides.isLeft == true && ev.key == "p") {
+        gun2.load();
+        gun2.volume = 0.2;
+        gun2.play();
         projectiles2.push(
             new Projectile(
                 player2.position.x + 25,
@@ -468,6 +507,9 @@ addEventListener("keyup", (ev) => {
             )
         );
     } else if (player2.sides.isRight == true && ev.key == "p") {
+        gun2.load();
+        gun2.volume = 0.2;
+        gun2.play();
         projectiles2.push(
             new Projectile(
                 player2.position.x + 50,
@@ -481,6 +523,9 @@ addEventListener("keyup", (ev) => {
             )
         );
     } else if (player2.sides.isUp == true && ev.key == "p") {
+        gun2.load();
+        gun2.volume = 0.2;
+        gun2.play();
         projectiles2.push(
             new Projectile(
                 player2.position.x + 40,
@@ -494,6 +539,9 @@ addEventListener("keyup", (ev) => {
             )
         );
     } else if (player2.sides.isDown == true && ev.key == "p") {
+        gun2.load();
+        gun2.volume = 0.2;
+        gun2.play();
         projectiles2.push(
             new Projectile(
                 player2.position.x + 45,
@@ -510,6 +558,7 @@ addEventListener("keyup", (ev) => {
 });
 
 startGameBtn.addEventListener("click", () => {
+    click.play();
     menu.style.display = "none"
     estadoAtual = estados.jogando
     player1.position.x = canvas.width / 2 - 100;
@@ -536,6 +585,12 @@ function main(){
     c.font = "20px Sigmar";
     background = new Image();
     background.src = "./Sprites/background.jpeg"
+
+    click = new Audio('./Audio/click3.mp3')
+    
+
+    hearts = new Image();
+    hearts.src = "./Sprites/heart.png"
 
     player1 = new Player("blue", canvas.width / 2 - 100, canvas.height / 2);
 
