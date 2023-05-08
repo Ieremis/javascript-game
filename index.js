@@ -26,7 +26,10 @@ let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, backg
 startGameBtn = document.getElementById("startGameBtn"),
 menu = document.getElementById("menu"),
 gameOver = document.getElementById("gameOverMenu"),
+credits = document.getElementById("credits"),
 backToMenuBtn = document.getElementById("backToMenuBtn"),
+backToMenuBtn2 = document.getElementById("backToMenuBtn2"),
+creditsBtn = document.getElementById("creditsBtn"),
 resetCount = 0,
 scorePointsHtml1 = document.getElementById("scorePoints1"),
 scorePointsHtml2 = document.getElementById("scorePoints2"),
@@ -598,9 +601,26 @@ backToMenuBtn.addEventListener("click", () => {
     menuMusic.load();
     menuMusic.play();
     gameOver.style.display = "none"
+    credits.style.display = "none"
     menu.style.display = "flex"
     estadoAtual = estados.jogar
     resetCount = 1;
+})
+
+backToMenuBtn2.addEventListener("click", () => {
+    click.load();
+    click.play();
+    credits.style.display = "none"
+    menu.style.display = "flex"
+    estadoAtual = estados.jogar
+})
+
+creditsBtn.addEventListener("click", () => {
+    click.load();
+    click.play();
+    gameOver.style.display = "none"
+    menu.style.display = "none"
+    credits.style.display = "flex"
 })
 
 function main(){

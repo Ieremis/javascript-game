@@ -50,6 +50,22 @@ body{
 
 }
 
+#credits {
+	position: absolute; 
+	top: 0px; 
+	left: 0px; 
+	right: 0px; 
+	bottom: 0px; 
+	margin: auto; 
+	width:800px;
+	height:600px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: black;
+}
+
 .scoreDiv{
     background-color: white;
     width: 400px;
@@ -109,4 +125,10 @@ body{
 
 .scorePoints{
     font-size: 30px;
+}
+
+.textCredits{
+    font-family : 'Sigmar', cursive;
+    font-size: 20px;
+    color: white;
 }
