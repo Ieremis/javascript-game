@@ -52,7 +52,7 @@ body{
 
 .scoreDiv{
     background-color: white;
-    width: 300px;
+    width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -68,12 +68,24 @@ body{
     color: black;
     margin-bottom: 10px;
     font-family: 'Sigmar', cursive;
+    font-size: 30px;
+    color: #f55ded;
+}
+
+.record {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    color: black;
+    margin-bottom: 10px;
+    font-family: 'Sigmar', cursive;
     font-size: 20px;
+    color: #c53fab;
 }
 
 #scoreTitle{
     font-family: 'Sigmar', cursive;
-    font-size: 25px;
+    font-size: 35px;
 }
 
 .buttons{
