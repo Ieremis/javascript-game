@@ -26,9 +26,12 @@ let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, backg
 startGameBtn = document.getElementById("startGameBtn"),
 menu = document.getElementById("menu"),
 gameOver = document.getElementById("gameOverMenu"),
+tutorial = document.getElementById("tutorial"),
 credits = document.getElementById("credits"),
 backToMenuBtn = document.getElementById("backToMenuBtn"),
 backToMenuBtn2 = document.getElementById("backToMenuBtn2"),
+backToMenuBtn3 = document.getElementById("backToMenuBtn3"),
+tutoBtn = document.getElementById("tutoBtn"),
 creditsBtn = document.getElementById("creditsBtn"),
 resetCount = 0,
 scorePointsHtml1 = document.getElementById("scorePoints1"),
@@ -37,7 +40,8 @@ vidas = 4, hearts, heartPos = [20, 90, 160, 230], click,
 gun1 = new Audio('./Audio/sfx_weapon_shotgun3.mp3'), 
 gun2 = new Audio('./Audio/sfx_weapon_shotgun1.mp3'),
 damage = new Audio('./Audio/damage.mp3'),
-zombie = new Audio('./Audio/zombie-11.mp3'),
+zombie1FX= new Audio('./Audio/zombie-11.mp3'),
+zombie2FX = new Audio('./Audio/zombie-6.mp3'),
 menuMusic,
 recordP1, recordP2,
 record1Html = document.getElementById('record1Html'),
@@ -182,7 +186,7 @@ function spawnEnemies() {
             };
                 enemies.push(new Enemy(x, y, "red", velocity));
             }
-        }, 1500);
+        }, 1200);
     }
 
 let animationId;
@@ -245,9 +249,9 @@ function animate() {
         projectiles1.forEach((projectile, projIndex) => {
             const dist1 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
             if (dist1 < 30) {
-                zombie.load()
-                zombie.volume = 0.2
-                zombie.play()
+                zombie1FX.load()
+                zombie1FX.volume = 0.2
+                zombie1FX.play()
                 projectiles1.splice(projIndex, 1);
                 enemies.splice(enemyIndex, 1);
                 player1.score += 10
@@ -257,9 +261,9 @@ function animate() {
         projectiles2.forEach((projectile, projIndex) => {
             const dist2 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
             if (dist2 < 30) {
-                zombie.load()
-                zombie.volume = 0.2
-                zombie.play()
+                zombie2FX.load()
+                zombie2FX.volume = 0.2
+                zombie2FX.play()
                 projectiles2.splice(projIndex, 1);
                 enemies.splice(enemyIndex, 1);
                 player2.score += 10
@@ -615,11 +619,28 @@ backToMenuBtn2.addEventListener("click", () => {
     estadoAtual = estados.jogar
 })
 
+backToMenuBtn3.addEventListener("click", () => {
+    click.load();
+    click.play();
+    tutorial.style.display = "none"
+    menu.style.display = "flex"
+    estadoAtual = estados.jogar
+})
+
+tutoBtn.addEventListener("click", () => {
+    click.load();
+    click.play();
+    gameOver.style.display = "none"
+    menu.style.display = "none"
+    tutorial.style.display = "grid"
+})
+
 creditsBtn.addEventListener("click", () => {
     click.load();
     click.play();
     gameOver.style.display = "none"
     menu.style.display = "none"
+    tutorial.style.display = "none"
     credits.style.display = "flex"
 })
 

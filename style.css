@@ -50,6 +50,27 @@ body{
 
 }
 
+#tutorial {
+	position: absolute; 
+	top: 0px; 
+	left: 0px; 
+	right: 0px; 
+	bottom: 0px; 
+	margin: auto; 
+	width:800px;
+	height:600px;
+    display: none;
+    background-color: white;
+    grid-template-areas: 
+    "item1 item1 item1 item1"
+    "item2 item2 item3 item3"
+    "item4 item4 item5 item5"
+    ". item6 item6 .";
+    background-image: url("./Sprites/background.jpeg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 #credits {
 	position: absolute; 
 	top: 0px; 
@@ -131,4 +152,49 @@ body{
     font-family : 'Sigmar', cursive;
     font-size: 20px;
     color: white;
+}
+
+.tutoText{
+    font-family : 'Sigmar', cursive;
+    font-size: 20px;
+    color: black;
+}
+
+#item1{
+    grid-area: item1;
+    text-align: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#item2{
+    grid-area: item2;
+    margin-left: 80px;
+    padding-left: 40px;
+    margin-top: 20px;
+}
+
+#item3{
+    grid-area: item3;
+    margin-right: 50px;
+    margin-top: 25px;
+    color: blue;
+}
+
+#item4{
+    grid-area: item4;
+    margin-left: 80px;
+    padding-top: 30px;
+    color: #c53fab;
+}
+
+#item5{
+    grid-area: item5;
+    margin-left: 80px;
+    width: 170px;
+}
+
+#backToMenuBtn3{
+    grid-area: item6;
+    margin-left: 70px;
 }
