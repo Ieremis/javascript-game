@@ -1,27 +1,3 @@
-// [x]: Criação do personagem (quadrado)
-
-// [x]: Movimentação do personagem
-
-// [x]: Programar os projéteis
-
-// [x]: Programar as colisões
-
-// [x]: Programar o score
-
-// [x]: Programar os inimigos
-
-// [x]: Adicionar um segun1do personagem
-
-// [ ]: Programar menu/UI do jogo
-
-// [ ]: Colisão dos players com o canvas
-
-// [ ]: Trocar os sprites
-
-// [ ]: Adicionar músicas
-
-// [x]: Adicionar efeitos sonoros
-
 let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, background, enemies, estadoAtual, 
 startGameBtn = document.getElementById("startGameBtn"),
 menu = document.getElementById("menu"),
@@ -33,6 +9,9 @@ backToMenuBtn2 = document.getElementById("backToMenuBtn2"),
 backToMenuBtn3 = document.getElementById("backToMenuBtn3"),
 tutoBtn = document.getElementById("tutoBtn"),
 creditsBtn = document.getElementById("creditsBtn"),
+nextSlide1 = document.getElementById("nextSlide1"),
+nextSlide2 = document.getElementById("nextSlide2"),
+nextSlide3 = document.getElementById("nextSlide3"),
 resetCount = 0,
 scorePointsHtml1 = document.getElementById("scorePoints1"),
 scorePointsHtml2 = document.getElementById("scorePoints2"),
@@ -632,7 +611,10 @@ tutoBtn.addEventListener("click", () => {
     click.play();
     gameOver.style.display = "none"
     menu.style.display = "none"
-    tutorial.style.display = "grid"
+    tutorial.style.display = "flex"
+    nextSlide1.style.display = "block"
+    nextSlide2.style.display = "none"
+    tutorial.style.backgroundImage = "url('./Sprites/Slide1.png')"
 })
 
 creditsBtn.addEventListener("click", () => {
@@ -642,6 +624,22 @@ creditsBtn.addEventListener("click", () => {
     menu.style.display = "none"
     tutorial.style.display = "none"
     credits.style.display = "flex"
+})
+
+nextSlide1.addEventListener("click", () => {
+    click.load();
+    click.play();
+    tutorial.style.backgroundImage = "url('./Sprites/Slide2.png')"
+    nextSlide2.style.display = "block"
+    nextSlide1.style.display = "none"
+})
+
+nextSlide2.addEventListener("click", () => {
+    click.load();
+    click.play();
+    tutorial.style.backgroundImage = "url('./Sprites/Slide3.png')"
+    nextSlide2.style.display = "none"
+    nextSlide1.style.display = "none"
 })
 
 function main(){
