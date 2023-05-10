@@ -1,27 +1,3 @@
-// [x]: Criação do personagem (quadrado)
-
-// [x]: Movimentação do personagem
-
-// [x]: Programar os projéteis
-
-// [x]: Programar as colisões
-
-// [x]: Programar o score
-
-// [x]: Programar os inimigos
-
-// [x]: Adicionar um segun1do personagem
-
-// [ ]: Programar menu/UI do jogo
-
-// [ ]: Colisão dos players com o canvas
-
-// [ ]: Trocar os sprites
-
-// [ ]: Adicionar músicas
-
-// [x]: Adicionar efeitos sonoros
-
 let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, background, enemies, estadoAtual, 
 startGameBtn = document.getElementById("startGameBtn"),
 menu = document.getElementById("menu"),
@@ -33,6 +9,9 @@ backToMenuBtn2 = document.getElementById("backToMenuBtn2"),
 backToMenuBtn3 = document.getElementById("backToMenuBtn3"),
 tutoBtn = document.getElementById("tutoBtn"),
 creditsBtn = document.getElementById("creditsBtn"),
+nextSlide1 = document.getElementById("nextSlide1"),
+nextSlide2 = document.getElementById("nextSlide2"),
+nextSlide3 = document.getElementById("nextSlide3"),
 resetCount = 0,
 scorePointsHtml1 = document.getElementById("scorePoints1"),
 scorePointsHtml2 = document.getElementById("scorePoints2"),
@@ -45,7 +24,7 @@ zombie2FX = new Audio('./Audio/zombie-6.mp3'),
 menuMusic,
 recordP1, recordP2,
 record1Html = document.getElementById('record1Html'),
-record2Html = document.getElementById('record2Html');
+record2Html = document.getElementById('record2Html')
 
 let estados = {
         jogar: 0,
@@ -77,33 +56,84 @@ class Player {
 
         const down1 = new Image();
         down1.src = "./Sprites/Baixo1.png";
-        this.down1 = down1;
+        const down2 = new Image();
+        down2.src = "./Sprites/Baixo2.png";
+        this.downSprites = [down1, down2]
+        //this.down1 = down1;
 
         const right1 = new Image();
         right1.src = "./Sprites/Direita1.png";
-        this.right1 = right1;
+        const right2 = new Image();
+        right2.src = "./Sprites/Direita2.png";
+        this.rightSprites = [right1, right2]
+        //this.right1 = right1;
 
         const up1 = new Image();
         up1.src = "./Sprites/Cima1.png";
-        this.up1 = up1;
+        const up2 = new Image();
+        up2.src = "./Sprites/Cima2.png";
+        this.upSprites = [up1, up2]
+        //this.up1 = up1;
 
         const left1 = new Image();
         left1.src = "./Sprites/Esquerda1.png";
-        this.left1 = left1;
+        const left2 = new Image();
+        left2.src = "./Sprites/Esquerda2.png";
+        this.leftSprites = [left1, left2]
+        //this.left1 = left1;
 
         this.color = color;
         this.score = 0;
+        this.countSprite = 0
     }
 
     draw() {
         if (this.sides.isDown == true) {
-            c.drawImage(this.down1, this.position.x, this.position.y, 80, 80);
+            
+            if(this.countSprite < 25){
+                c.drawImage(this.downSprites[0], this.position.x, this.position.y, 80, 80);
+                this.countSprite++
+            } else if(this.countSprite >= 25 || this.countSprite < 50){
+                c.drawImage(this.downSprites[1], this.position.x, this.position.y, 80, 80);
+                this.countSprite++;
+                if(this.countSprite === 50){
+                    this.countSprite = 0;
+                }
+            }
+            //c.drawImage(this.down1, this.position.x, this.position.y, 80, 80);
         } else if (this.sides.isRight == true) {
-            c.drawImage(this.right1, this.position.x, this.position.y, 80, 80);
+            if(this.countSprite < 25){
+                c.drawImage(this.rightSprites[0], this.position.x, this.position.y, 80, 80);
+                this.countSprite++
+            } else if(this.countSprite >= 25 || this.countSprite < 50){
+                c.drawImage(this.rightSprites[1], this.position.x, this.position.y, 80, 80);
+                this.countSprite++;
+                if(this.countSprite === 50){
+                    this.countSprite = 0;
+                }
+            }
         } else if (this.sides.isUp == true) {
-            c.drawImage(this.up1, this.position.x, this.position.y, 80, 80);
+            if(this.countSprite < 25){
+                c.drawImage(this.upSprites[0], this.position.x, this.position.y, 80, 80);
+                this.countSprite++
+            } else if(this.countSprite >= 25 || this.countSprite < 50){
+                c.drawImage(this.upSprites[1], this.position.x, this.position.y, 80, 80);
+                this.countSprite++;
+                if(this.countSprite === 50){
+                    this.countSprite = 0;
+                }
+            }
         } else if (this.sides.isLeft == true) {
-            c.drawImage(this.left1, this.position.x, this.position.y, 80, 80);
+            if(this.countSprite < 25){
+                c.drawImage(this.leftSprites[0], this.position.x, this.position.y, 80, 80);
+                this.countSprite++
+            } else if(this.countSprite >= 25 || this.countSprite < 50){
+                c.drawImage(this.leftSprites[1], this.position.x, this.position.y, 80, 80);
+                this.countSprite++;
+                if(this.countSprite === 50){
+                    this.countSprite = 0;
+                }
+            }
         }
     }
 
@@ -149,13 +179,24 @@ class Enemy {
         this.height = 80;
         const zombie1 = new Image();
         zombie1.src = "./Sprites/Zumbi1.png";
-        this.zombie1 = zombie1;
+        const zombie2 = new Image();
+        zombie2.src = "./Sprites/Zumbi2.png";
+        this.zombieSprites = [zombie1, zombie2];
+        this.countSprite = 0
     }
 
     draw() {
-        /* c.fillStyle = this.color;
-        c.fillRect(this.x, this.y, 30, 30); */
-        c.drawImage(this.zombie1, this.x, this.y, 80, 80)
+        if(this.countSprite < 50){
+            c.drawImage(this.zombieSprites[0], this.x, this.y, 80, 80);
+            this.countSprite++
+        } else if(this.countSprite >= 50 || this.countSprite < 100){
+            c.drawImage(this.zombieSprites[1], this.x, this.y, 80, 80);
+            this.countSprite++;
+            if(this.countSprite === 100){
+                this.countSprite = 0;
+            }
+        }
+        //c.drawImage(this.zombie1, this.x, this.y, 80, 80)
     }
 
     update() {
@@ -632,7 +673,10 @@ tutoBtn.addEventListener("click", () => {
     click.play();
     gameOver.style.display = "none"
     menu.style.display = "none"
-    tutorial.style.display = "grid"
+    tutorial.style.display = "flex"
+    nextSlide1.style.display = "block"
+    nextSlide2.style.display = "none"
+    tutorial.style.backgroundImage = "url('./Sprites/Slide1.png')"
 })
 
 creditsBtn.addEventListener("click", () => {
@@ -642,6 +686,22 @@ creditsBtn.addEventListener("click", () => {
     menu.style.display = "none"
     tutorial.style.display = "none"
     credits.style.display = "flex"
+})
+
+nextSlide1.addEventListener("click", () => {
+    click.load();
+    click.play();
+    tutorial.style.backgroundImage = "url('./Sprites/Slide2.png')"
+    nextSlide2.style.display = "block"
+    nextSlide1.style.display = "none"
+})
+
+nextSlide2.addEventListener("click", () => {
+    click.load();
+    click.play();
+    tutorial.style.backgroundImage = "url('./Sprites/Slide3.png')"
+    nextSlide2.style.display = "none"
+    nextSlide1.style.display = "none"
 })
 
 function main(){
