@@ -8,6 +8,7 @@ backToMenuBtn = document.getElementById("backToMenuBtn"),
 backToMenuBtn2 = document.getElementById("backToMenuBtn2"),
 backToMenuBtn3 = document.getElementById("backToMenuBtn3"),
 tutoBtn = document.getElementById("tutoBtn"),
+musicBtn = document.getElementById("musicBtn"),
 creditsBtn = document.getElementById("creditsBtn"),
 nextSlide1 = document.getElementById("nextSlide1"),
 nextSlide2 = document.getElementById("nextSlide2"),
@@ -24,7 +25,8 @@ zombie2FX = new Audio('./Audio/zombie-6.mp3'),
 menuMusic,
 recordP1, recordP2,
 record1Html = document.getElementById('record1Html'),
-record2Html = document.getElementById('record2Html')
+record2Html = document.getElementById('record2Html'),
+musicPlaying = true;
 
 let estados = {
         jogar: 0,
@@ -658,6 +660,19 @@ backToMenuBtn2.addEventListener("click", () => {
     credits.style.display = "none"
     menu.style.display = "flex"
     estadoAtual = estados.jogar
+})
+
+musicBtn.addEventListener("click", () => {
+    click.load();
+    click.play();
+    if(musicPlaying == true){
+        musicPlaying = false;
+        menuMusic.pause();
+    } else {
+        musicPlaying = true;
+        menuMusic.load();
+        menuMusic.play();
+    }
 })
 
 backToMenuBtn3.addEventListener("click", () => {
