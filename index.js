@@ -149,19 +149,17 @@ class Player {
 }
 
 class Projectile {
-    constructor(x, y, radius, color, velocity) {
+    constructor(x, y, radius, color, velocity, projSprite) {
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.color = color;
         this.velocity = velocity;
+        this.projSprite = projSprite
     }
 
     draw() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        c.fillStyle = this.color;
-        c.fill();
+        c.drawImage(this.projSprite, this.x, this.y, 20, 20);
     }
 
     update() {
@@ -506,7 +504,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: -15,
                     y: 0,
-                }
+                },
+                proj1
             )
         );
     } else if (player1.sides.isRight == true && ev.key == " ") {
@@ -522,7 +521,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: 15,
                     y: 0,
-                }
+                },
+                proj1
             )
         );
     } else if (player1.sides.isUp == true && ev.key == " ") {
@@ -538,7 +538,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: 0,
                     y: -15,
-                }
+                },
+                proj1
             )
         );
     } else if (player1.sides.isDown == true && ev.key == " ") {
@@ -554,7 +555,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: 0,
                     y: 15,
-                }
+                },
+                proj1
             )
         );
     }
@@ -571,7 +573,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: -15,
                     y: 0,
-                }
+                },
+                proj2
             )
         );
     } else if (player2.sides.isRight == true && ev.key == "p") {
@@ -587,7 +590,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: 15,
                     y: 0,
-                }
+                },
+                proj2
             )
         );
     } else if (player2.sides.isUp == true && ev.key == "p") {
@@ -603,7 +607,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: 0,
                     y: -15,
-                }
+                },
+                proj2
             )
         );
     } else if (player2.sides.isDown == true && ev.key == "p") {
@@ -619,7 +624,8 @@ addEventListener("keyup", (ev) => {
                 {
                     x: 0,
                     y: 15,
-                }
+                },
+                proj2
             )
         );
     }
@@ -772,6 +778,10 @@ function main(){
     estadoAtual = estados.jogar
     animate();
 }
-main()
+    let proj1 = new Image();
+    proj1.src = "./Sprites/TIROAZUL.png";
+    let proj2 = new Image();
+    proj2.src = "./Sprites/TIROVERMELHO.png";
+    main()
     
 
