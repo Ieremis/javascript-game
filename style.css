@@ -30,7 +30,9 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: black;
+    background-image: url("./Sprites/menu.gif");
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 #gameOverMenu {
@@ -46,8 +48,9 @@ body{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: black;
-
+    background-image: url("./Sprites/menu.gif");
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 #tutorial {
