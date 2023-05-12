@@ -9,6 +9,7 @@ backToMenuBtn2 = document.getElementById("backToMenuBtn2"),
 backToMenuBtn3 = document.getElementById("backToMenuBtn3"),
 tutoBtn = document.getElementById("tutoBtn"),
 musicBtn = document.getElementById("musicBtn"),
+musicGameBtn = document.getElementById("musicGameBtn"),
 creditsBtn = document.getElementById("creditsBtn"),
 nextSlide1 = document.getElementById("nextSlide1"),
 nextSlide2 = document.getElementById("nextSlide2"),
@@ -26,7 +27,7 @@ menuMusic,
 recordP1, recordP2,
 record1Html = document.getElementById('record1Html'),
 record2Html = document.getElementById('record2Html'),
-musicPlaying = true;
+musicPlaying = true, musicGamePlaying = true;
 
 let estados = {
         jogar: 0,
@@ -321,7 +322,7 @@ function animate() {
             heartPos.pop();
             if(vidas == 0){
                 estadoAtual = estados.perdeu;
-                enemies.splice(enemyIndex);
+                enemies.splice(0, 20);
                 gameOver.style.display = "flex"
                 vidas = 4;
                 heartPos = [20, 90, 160, 230]
@@ -338,7 +339,7 @@ function animate() {
             heartPos.pop();
             if(vidas == 0){
                 estadoAtual = estados.perdeu;
-                enemies.splice(enemyIndex);
+                enemies.splice(0, 20);
                 gameOver.style.display = "flex"
                 vidas = 4;
                 heartPos = [20, 90, 160, 230]
@@ -638,7 +639,11 @@ startGameBtn.addEventListener("click", () => {
     gameMusic.volume = 0.8
     gameMusic.load();
     gameMusic.play();
+    gameMusic.loop = true;
     menu.style.display = "none"
+    musicBtn.style.display = "none"
+    musicGameBtn.style.display = "block"
+    musicPlaying = false
     estadoAtual = estados.jogando
     player1.position.x = canvas.width / 2 - 100;
     player1.position.y = canvas.height / 2;
@@ -656,10 +661,14 @@ backToMenuBtn.addEventListener("click", () => {
     click.play();
     menuMusic.load();
     menuMusic.play();
+    menuMusic.loop = true;
+    musicPlaying = true
     gameMusic.pause();
     gameOver.style.display = "none"
     credits.style.display = "none"
     menu.style.display = "flex"
+    musicBtn.style.display = "block"
+    musicGameBtn.style.display = "none"
     estadoAtual = estados.jogar
     resetCount = 1;
 })
@@ -682,6 +691,21 @@ musicBtn.addEventListener("click", () => {
         musicPlaying = true;
         menuMusic.load();
         menuMusic.play();
+        menuMusic.loop = true;
+    }
+})
+
+musicGameBtn.addEventListener("click", () => {
+    click.load();
+    click.play();
+    if(musicGamePlaying == true){
+        musicGamePlaying = false;
+        gameMusic.pause();
+    } else {
+        musicGamePlaying = true;
+        gameMusic.load();
+        gameMusic.play();
+        gameMusic.loop = true;
     }
 })
 
