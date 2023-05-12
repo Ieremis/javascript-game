@@ -62,28 +62,24 @@ class Player {
         const down2 = new Image();
         down2.src = "./Sprites/Baixo2.png";
         this.downSprites = [down1, down2]
-        //this.down1 = down1;
 
         const right1 = new Image();
         right1.src = "./Sprites/Direita1.png";
         const right2 = new Image();
         right2.src = "./Sprites/Direita2.png";
         this.rightSprites = [right1, right2]
-        //this.right1 = right1;
 
         const up1 = new Image();
         up1.src = "./Sprites/Cima1.png";
         const up2 = new Image();
         up2.src = "./Sprites/Cima2.png";
         this.upSprites = [up1, up2]
-        //this.up1 = up1;
 
         const left1 = new Image();
         left1.src = "./Sprites/Esquerda1.png";
         const left2 = new Image();
         left2.src = "./Sprites/Esquerda2.png";
         this.leftSprites = [left1, left2]
-        //this.left1 = left1;
 
         this.color = color;
         this.score = 0;
@@ -103,7 +99,6 @@ class Player {
                     this.countSprite = 0;
                 }
             }
-            //c.drawImage(this.down1, this.position.x, this.position.y, 80, 80);
         } else if (this.sides.isRight == true) {
             if(this.countSprite < 25){
                 c.drawImage(this.rightSprites[0], this.position.x, this.position.y, 80, 80);
@@ -197,14 +192,12 @@ class Enemy {
                 this.countSprite = 0;
             }
         }
-        //c.drawImage(this.zombie1, this.x, this.y, 80, 80)
     }
 
     update() {
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
-        //c.strokeRect(this.x, this.y, this.width, this.height) debug
     }
 }
 
@@ -359,7 +352,6 @@ function animate() {
         player2.velocity.x = -5;
     }
 
-    //c.strokeRect(player1.position.x, player1.position.y, player1.width, player1.height); //-> debug do tamanho do player
     if(estadoAtual == estados.perdeu){
         scorePointsHtml1.innerHTML = player1.score;
         if (player1.score > recordP1) {// calculo do score
