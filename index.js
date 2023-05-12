@@ -16,7 +16,7 @@ nextSlide3 = document.getElementById("nextSlide3"),
 resetCount = 0,
 scorePointsHtml1 = document.getElementById("scorePoints1"),
 scorePointsHtml2 = document.getElementById("scorePoints2"),
-vidas = 4, hearts, heartPos = [20, 90, 160, 230], click, 
+vidas = 4, hearts, heartPos = [20, 90, 160, 230], click, gameMusic, 
 gun1 = new Audio('./Audio/sfx_weapon_shotgun3.mp3'), 
 gun2 = new Audio('./Audio/sfx_weapon_shotgun1.mp3'),
 damage = new Audio('./Audio/damage.mp3'),
@@ -227,7 +227,7 @@ function spawnEnemies() {
             };
                 enemies.push(new Enemy(x, y, "red", velocity));
             }
-        }, 1200);
+        }, 800);
     }
 
 let animationId;
@@ -635,6 +635,9 @@ startGameBtn.addEventListener("click", () => {
     click.load();
     click.play();
     menuMusic.pause();
+    gameMusic.volume = 0.8
+    gameMusic.load();
+    gameMusic.play();
     menu.style.display = "none"
     estadoAtual = estados.jogando
     player1.position.x = canvas.width / 2 - 100;
@@ -653,6 +656,7 @@ backToMenuBtn.addEventListener("click", () => {
     click.play();
     menuMusic.load();
     menuMusic.play();
+    gameMusic.pause();
     gameOver.style.display = "none"
     credits.style.display = "none"
     menu.style.display = "flex"
@@ -739,7 +743,7 @@ function main(){
     background.src = "./Sprites/background.jpeg"
 
     click = new Audio('./Audio/click3.mp3')
-    
+    gameMusic = new Audio('./Audio/gameMusic.mp3')
 
     hearts = new Image();
     hearts.src = "./Sprites/heart.png"
