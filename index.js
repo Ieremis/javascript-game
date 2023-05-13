@@ -449,42 +449,34 @@ addEventListener("keydown", (ev) => { //ADICIONA O EVENT LISTENER PARA UMA TECLA
 addEventListener("keyup", (ev) => { // ZERA AS VARIAVEIS DE POSIÇÃO E A VELOCIDADE QUANDO A TECLA DEIXA DE SER APERTADA
     switch (ev.keyCode) {
         case 65:
-            console.log("esquerda");
             keys1.left.pressed = false;
             player1.velocity.x = 0;
             break;
         case 87:
-            console.log("cima");
             keys1.up.pressed = false
             player1.velocity.y = 0;
             break;
         case 68:
-            console.log("direita");
             keys1.right.pressed = false;
             player1.velocity.x = 0;
             break;
         case 83:
-            console.log("baixo");
             keys1.down.pressed = false
             player1.velocity.y = 0;
             break;
         case 37:
-            console.log("esquerda");
             keys2.left.pressed = false;
             player2.velocity.x = 0;
             break;
         case 38:
-            console.log("cima");
             keys2.up.pressed = false
             player2.velocity.y = 0;
             break;
         case 39:
-            console.log("direita");
             keys2.right.pressed = false;
             player2.velocity.x = 0;
             break;
         case 40:
-            console.log("baixo");
             keys2.down.pressed = false;
             player2.velocity.y = 0;
             break;
