@@ -219,7 +219,7 @@ function spawnEnemies() { //spawna os inimigos
             };
                 enemies.push(new Enemy(x, y, velocity)); //insere o zumbi no array dos inimigos com os valores calculados
             }
-        }, 500);
+        }, 800);
     }
 
 let animationId;
@@ -314,7 +314,7 @@ function animate() {
             heartPos.pop(); //limpa a vida do array para nao ser mais desenhada
             if(vidas == 0){ //caso as vidas acabem
                 estadoAtual = estados.perdeu;//troca o estado para perdeu
-                enemies.splice(0, 20);//limpa os zumbis da tela
+                enemies.splice(0, 50);//limpa os zumbis da tela
                 gameOver.style.display = "flex"//mostra o menu
                 vidas = 4;//reseta as vidas
                 heartPos = [20, 90, 160, 230]//reseta as posições dos corações na tela
@@ -331,7 +331,7 @@ function animate() {
             heartPos.pop();
             if(vidas == 0){
                 estadoAtual = estados.perdeu;
-                enemies.splice(0, 20);
+                enemies.splice(0, 50);
                 gameOver.style.display = "flex"
                 vidas = 4;
                 heartPos = [20, 90, 160, 230]
