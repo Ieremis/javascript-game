@@ -1,3 +1,4 @@
+//DEFINIÇÃO DAS VARIÁVEIS
 let canvas, c, player1, player2, keys1, keys2, projectiles1, projectiles2, background, enemies, estadoAtual, 
 startGameBtn = document.getElementById("startGameBtn"),
 menu = document.getElementById("menu"),
@@ -28,15 +29,15 @@ recordP1, recordP2,
 record1Html = document.getElementById('record1Html'),
 record2Html = document.getElementById('record2Html'),
 musicPlaying = true, musicGamePlaying = true;
-
+//DEFINIÇÃO DOS ESTADOS
 let estados = {
         jogar: 0,
         jogando: 1,
         perdeu: 2
 }
-
+//criação da classe do player com um constructor
 class Player {
-    constructor(color, positionX, positionY) {
+    constructor(positionX, positionY) {
         this.position = {
             x: positionX,
             y: positionY,
@@ -49,14 +50,14 @@ class Player {
 
         this.width = 75;
         this.height = 80;
-
+        //definição dos lados para trocar os sprites e fazer animação
         this.sides = {
             isUp: false,
             isDown: true,
             isLeft: false,
             isRight: false,
         };
-
+        //definição dos sprites para cada lado e colocando num array para poder animar
         const down1 = new Image();
         down1.src = "./Sprites/Baixo1.png";
         const down2 = new Image();
@@ -81,15 +82,13 @@ class Player {
         left2.src = "./Sprites/Esquerda2.png";
         this.leftSprites = [left1, left2]
 
-        this.color = color;
-        this.score = 0;
-        this.countSprite = 0
+        this.score = 0; // zera o score assim que o personagem é criado
+        this.countSprite = 0 // zera o contador dos sprites para criar a animação
     }
 
-    draw() {
+    draw() { //desenha o sprite dependendo do lado que o personagem está apontando e passa pelo array pra criar animação
         if (this.sides.isDown == true) {
-            
-            if(this.countSprite < 25){
+            if(this.countSprite < 25){ //CRIA UM CONTADOR ATUALIZADO A CADA FRAME, USADO PARA PRODUZIR O EFEITO DE ANIMAÇÃO
                 c.drawImage(this.downSprites[0], this.position.x, this.position.y, 80, 80);
                 this.countSprite++
             } else if(this.countSprite >= 25 || this.countSprite < 50){
@@ -135,7 +134,7 @@ class Player {
         }
     }
 
-    update() {
+    update() { //chamado todo frame, atualiza a velocidade e chama a função de desenhar o personagem
         if(estadoAtual == estados.jogando){
             this.draw();
             this.position.y += this.velocity.y;
@@ -144,35 +143,34 @@ class Player {
     }
 }
 
-class Projectile {
-    constructor(x, y, radius, color, velocity, projSprite) {
+class Projectile { // construção da classe do projétil
+    constructor(x, y, radius, velocity, projSprite) {
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.color = color;
         this.velocity = velocity;
         this.projSprite = projSprite
     }
 
     draw() {
-        c.drawImage(this.projSprite, this.x, this.y, 20, 20);
+        c.drawImage(this.projSprite, this.x, this.y, 20, 20); //desenha o projétil com o sprite que foi passado no constructor
     }
 
-    update() {
-        this.draw();
+    update() { // chamado a cada frame e realiza a função de sempre desenhar o projétil
+        this.draw(); 
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
     }
 }
 
-class Enemy {
-    constructor(x, y, color, velocity) {
+class Enemy { // criação do constructor da classe dos inimigos
+    constructor(x, y, velocity) {
         this.x = x;
         this.y = y;
-        this.color = color;
         this.velocity = velocity;
         this.width = 75;
         this.height = 80;
+        //define os sprites dos zumbis e coloca num array para criar a animação
         const zombie1 = new Image();
         zombie1.src = "./Sprites/Zumbi1.png";
         const zombie2 = new Image();
@@ -181,8 +179,8 @@ class Enemy {
         this.countSprite = 0
     }
 
-    draw() {
-        if(this.countSprite < 50){
+    draw() { // desenha o sprite do zumbi e cria a animação
+        if(this.countSprite < 50){ //CRIA UM CONTADOR ATUALIZADO A CADA FRAME, USADO PARA PRODUZIR O EFEITO DE ANIMAÇÃO
             c.drawImage(this.zombieSprites[0], this.x, this.y, 80, 80);
             this.countSprite++
         } else if(this.countSprite >= 50 || this.countSprite < 100){
@@ -194,18 +192,18 @@ class Enemy {
         }
     }
 
-    update() {
+    update() { // chamado todo frame, e chama a função de desenhar
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
     }
 }
 
-function spawnEnemies() {
+function spawnEnemies() { //spawna os inimigos
         setInterval(() => {
             if(estadoAtual == estados.jogando){
             let x;
-            let y;
+            let y; //define o x e o y de onde o zumbi nascerá realizando um cálculo através do Math.random()
             if (Math.random() < 0.5) {
                 x = Math.random() < 0.5 ? 0 - 20 : canvas.width + 20;
                 y = Math.random() * canvas.height;
@@ -215,23 +213,23 @@ function spawnEnemies() {
             }
             const angle = Math.atan2(canvas.height / 2 - y, canvas.width / 2 - x);
     
-            const velocity = {
+            const velocity = { //define o angulo da velocidade e a velocidade em si
                 x: Math.cos(angle),
                 y: Math.sin(angle),
             };
-                enemies.push(new Enemy(x, y, "red", velocity));
+                enemies.push(new Enemy(x, y, velocity)); //insere o zumbi no array dos inimigos com os valores calculados
             }
-        }, 800);
+        }, 500);
     }
 
 let animationId;
 function animate() {
-    animationId = requestAnimationFrame(animate);
-    c.clearRect(0, 0, canvas.width, canvas.height);
-    c.drawImage(background, 0, 0, canvas.width, canvas.height);
-    player1.update();
-    player2.update();
-    c.fillStyle = "#ffffff"
+    animationId = requestAnimationFrame(animate); // cria uma função que atualiza o jogo frame a frame
+    c.clearRect(0, 0, canvas.width, canvas.height); // limpa o canvas para não deixar rastros
+    c.drawImage(background, 0, 0, canvas.width, canvas.height); // desenha o fundo
+    player1.update(); // chama a função update
+    player2.update(); // chama a função update
+    c.fillStyle = "#ffffff" // criação dos scores dos personagens
     c.globalAlpha = 0.6;
     c.fillRect(5, 2, 235, 40)
     c.fillStyle = "#ffffff"
@@ -243,12 +241,12 @@ function animate() {
     c.fillText("SCORE PLAYER 2: " + player2.score, 560, 30);
 
     heartPos.forEach((x) => {
-        c.drawImage(hearts, x, 520, 60, 60)
+        c.drawImage(hearts, x, 520, 60, 60) // desenha os corações com o x e o y dos valores dos arrays
     })
 
     projectiles1.forEach((proj, projIndex) => {
         proj.update();
-        //removendo dos cantos do canvas
+        //removendo dos cantos do canvas os projéteis
         if (
             proj.x < 0 ||
             proj.x > canvas.width ||
@@ -259,8 +257,8 @@ function animate() {
         }
     });
     projectiles2.forEach((proj, projIndex) => {
-        proj.update();
-        //removendo dos cantos do canvas
+        proj.update(); // chama a função update para todos os projéteis do array
+        //removendo dos cantos do canvas os projéteis
         if (
             proj.x < 0 ||
             proj.x > canvas.width ||
@@ -272,7 +270,7 @@ function animate() {
     });
 
     enemies.forEach((enemy, enemyIndex) => {
-        enemy.update();
+        enemy.update(); // chama a função update para todos os inimigos do array
         if (
             enemy.x <= -20 ||
             enemy.x >= canvas.width + 20 ||
@@ -281,14 +279,15 @@ function animate() {
         ) {
             enemies.splice(enemyIndex, 1);
         }
-        projectiles1.forEach((projectile, projIndex) => {
+        //COLISÃO DO INIMIGO COM OS PROJÉTEIS
+        projectiles1.forEach((projectile, projIndex) => { // calcula a colisão do inimigo com o projétil
             const dist1 = Math.hypot(projectile.x - enemy.x - enemy.width / 2, projectile.y - enemy.y - enemy.height / 2);
             if (dist1 < 30) {
-                zombie1FX.load()
+                zombie1FX.load() // toca o som do zumbi morrendo
                 zombie1FX.volume = 0.2
                 zombie1FX.play()
-                projectiles1.splice(projIndex, 1);
-                enemies.splice(enemyIndex, 1);
+                projectiles1.splice(projIndex, 1); // limpa o projétil colidido
+                enemies.splice(enemyIndex, 1); // limpa o inimigo colidido
                 player1.score += 10
             }
         });
@@ -304,21 +303,21 @@ function animate() {
                 player2.score += 10
             }
         });
-
+        // COLISÃO DO INIMIGO COM O PLAYER
         const dist1 = Math.hypot(enemy.x - player1.position.x, enemy.y - player1.position.y + 10);
-        if (dist1 < 60) {
-            enemies.splice(enemyIndex, 1);
-            damage.load()
+        if (dist1 < 60) { // calcula a distancia entre o inimigo e o player
+            enemies.splice(enemyIndex, 1); // limpa o inimigo colidido da cena
+            damage.load() // toca o som de dano
             damage.volume = 0.3
             damage.play()
-            vidas--;
-            heartPos.pop();
-            if(vidas == 0){
-                estadoAtual = estados.perdeu;
-                enemies.splice(0, 20);
-                gameOver.style.display = "flex"
-                vidas = 4;
-                heartPos = [20, 90, 160, 230]
+            vidas--; //diminui a vida
+            heartPos.pop(); //limpa a vida do array para nao ser mais desenhada
+            if(vidas == 0){ //caso as vidas acabem
+                estadoAtual = estados.perdeu;//troca o estado para perdeu
+                enemies.splice(0, 20);//limpa os zumbis da tela
+                gameOver.style.display = "flex"//mostra o menu
+                vidas = 4;//reseta as vidas
+                heartPos = [20, 90, 160, 230]//reseta as posições dos corações na tela
             }
         }
 
@@ -339,22 +338,22 @@ function animate() {
             }
         }
     });
-
+        //ATUALIZAÇÃO DA VELOCIDADE, TESTANDO A POSIÇÃO DO PERSONAGEM (SE ELE ESTÁ DENTRO DO CANVAS) E PRA QUAL DIREÇÃO ELE ESTA SE MOVIMENTANDO
     if (keys1.right.pressed && player1.position.x + player1.width <= 800) {
         player1.velocity.x = 5;
     } else if (keys1.left.pressed && player1.position.x >= 0) {
         player1.velocity.x = -5;
-    }
+    } else player1.velocity.x = 0
 
     if (keys2.right.pressed && player2.position.x + player2.width <= 800) {
         player2.velocity.x = 5;
     } else if (keys2.left.pressed && player2.position.x >= 0) {
         player2.velocity.x = -5;
-    }
-
+    } else player2.velocity.x = 0
+        //TESTA CONTINUAMENTE QUAL É O ESTADO ATUAL
     if(estadoAtual == estados.perdeu){
-        scorePointsHtml1.innerHTML = player1.score;
-        if (player1.score > recordP1) {// calculo do score
+        scorePointsHtml1.innerHTML = player1.score; // ATUALIZA O SCORE DO MENU DO GAME OVER
+        if (player1.score > recordP1) {// CALCULO DO RECORD
             localStorage.setItem("recordP1", player1.score);
             recordP1 = player1.score;
         }
@@ -368,69 +367,76 @@ function animate() {
     }
 }
 
-addEventListener("keydown", (ev) => {
+addEventListener("keydown", (ev) => { //ADICIONA O EVENT LISTENER PARA UMA TECLA PRESSIONADA
     switch (ev.keyCode) {
-        case 65:
-            console.log("esquerda");
-            keys1.left.pressed = true;
+        case 65: //A
+            keys1.left.pressed = true; // VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
             player1.sides.isDown = false;
             player1.sides.isRight = false;
             player1.sides.isUp = false;
-            player1.sides.isLeft = true;
+            player1.sides.isLeft = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             break;
-        case 87:
-            console.log("cima");
-            player1.velocity.y = -5;
+        case 87: //W
+            keys1.up.pressed = true // VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
+            if(keys1.up.pressed && player1.position.y >= 10){ //TESTA A POSIÇÃO DO PERSONAGEM PARA ELE SE MOVIMENTAR APENAS DENTRO DO CANVAS NO EIXO Y
+                player1.velocity.y = -5
+            }
+            else player1.velocity.y = 0;
             player1.sides.isDown = false;
             player1.sides.isRight = false;
-            player1.sides.isUp = true;
+            player1.sides.isUp = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             player1.sides.isLeft = false;
             break;
-        case 68:
-            console.log("direita");
-            keys1.right.pressed = true;
+        case 68: //D
+            keys1.right.pressed = true;// VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
             player1.sides.isDown = false;
-            player1.sides.isRight = true;
+            player1.sides.isRight = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             player1.sides.isUp = false;
             player1.sides.isLeft = false;
             break;
-        case 83:
-            console.log("baixo");
-
-            player1.velocity.y = 5;
-            player1.sides.isDown = true;
+        case 83: //S
+            keys1.down.pressed = true; // VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
+            if(keys1.down.pressed && player1.position.y <= 510){
+                player1.velocity.y = 5
+            }
+            else player1.velocity.y = 0;
+            player1.sides.isDown = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             player1.sides.isRight = false;
             player1.sides.isUp = false;
             player1.sides.isLeft = false;
             break;
-        case 37:
-            console.log("esquerda");
-            keys2.left.pressed = true;
+        case 37: //SETINHA ESQ
+            keys2.left.pressed = true; // VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
             player2.sides.isDown = false;
             player2.sides.isRight = false;
             player2.sides.isUp = false;
-            player2.sides.isLeft = true;
+            player2.sides.isLeft = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             break;
-        case 38:
-            console.log("cima");
-            player2.velocity.y = -5;
+        case 38: //SETINHA CIMA
+            keys2.up.pressed = true; // VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
+            if(keys2.up.pressed && player2.position.y >= 10){
+                player2.velocity.y = -5  
+            }
+            else player2.velocity.y = 0;
             player2.sides.isDown = false;
             player2.sides.isRight = false;
-            player2.sides.isUp = true;
+            player2.sides.isUp = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             player2.sides.isLeft = false;
             break;
-        case 39:
-            console.log("direita");
-            keys2.right.pressed = true;
+        case 39: //SETINHA DIR
+            keys2.right.pressed = true; // VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
             player2.sides.isDown = false;
-            player2.sides.isRight = true;
+            player2.sides.isRight = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             player2.sides.isUp = false;
             player2.sides.isLeft = false;
             break;
-        case 40:
-            console.log("baixo");
-            player2.velocity.y = 5;
-            player2.sides.isDown = true;
+        case 40: //SETINHA BAIXO
+            keys2.down.pressed = true; // VARIÁVEIS USADAS PARA CALCULAR A POSIÇÃO
+            if(keys2.down.pressed && player2.position.y <= 510){
+                player2.velocity.y = 5 
+            }
+            else player2.velocity.y = 0;
+            player2.sides.isDown = true; // VARIÁVEIS USADAS PARA TROCAR O SPRITE
             player2.sides.isRight = false;
             player2.sides.isUp = false;
             player2.sides.isLeft = false;
@@ -440,7 +446,7 @@ addEventListener("keydown", (ev) => {
     }
 });
 
-addEventListener("keyup", (ev) => {
+addEventListener("keyup", (ev) => { // ZERA AS VARIAVEIS DE POSIÇÃO E A VELOCIDADE QUANDO A TECLA DEIXA DE SER APERTADA
     switch (ev.keyCode) {
         case 65:
             console.log("esquerda");
@@ -449,6 +455,7 @@ addEventListener("keyup", (ev) => {
             break;
         case 87:
             console.log("cima");
+            keys1.up.pressed = false
             player1.velocity.y = 0;
             break;
         case 68:
@@ -458,6 +465,7 @@ addEventListener("keyup", (ev) => {
             break;
         case 83:
             console.log("baixo");
+            keys1.down.pressed = false
             player1.velocity.y = 0;
             break;
         case 37:
@@ -467,6 +475,7 @@ addEventListener("keyup", (ev) => {
             break;
         case 38:
             console.log("cima");
+            keys2.up.pressed = false
             player2.velocity.y = 0;
             break;
         case 39:
@@ -476,26 +485,26 @@ addEventListener("keyup", (ev) => {
             break;
         case 40:
             console.log("baixo");
+            keys2.down.pressed = false;
             player2.velocity.y = 0;
             break;
         default:
             break;
     }
 });
-
+//EVENT LISTENERS PARA OS TIROS, NA TECLA ESPAÇO " " E NA TECLA P
 addEventListener("keyup", (ev) => {
-    if (player1.sides.isLeft == true && ev.key == " ") {
-        gun1.load();
+    if (player1.sides.isLeft == true && ev.key == " ") { //TESTA O LADO QUE O PERSONAGEM ESTÁ MIRANDO
+        gun1.load(); // TOCA O SOM DO DISPARO
         gun1.volume = 0.1;
         gun1.play();
-        projectiles1.push(
+        projectiles1.push( //INSERE O PROJÉTIL COM VALORES DIFERENTES DEPENDENDO DA POSIÇÃO
             new Projectile(
-                player1.position.x + 25,
+                player1.position.x + 25, //DISPARADO DO X E DO Y DO PERSONAGEM
                 player1.position.y + 55,
                 10,
-                "red",
                 {
-                    x: -15,
+                    x: -15, //DEPENDENDO DO LADO, IRÁ DISPARAR COM UMA VELOCIDADE X E Y
                     y: 0,
                 },
                 proj1
@@ -510,7 +519,6 @@ addEventListener("keyup", (ev) => {
                 player1.position.x + 50,
                 player1.position.y + 50,
                 10,
-                "red",
                 {
                     x: 15,
                     y: 0,
@@ -527,7 +535,6 @@ addEventListener("keyup", (ev) => {
                 player1.position.x + 40,
                 player1.position.y - 10,
                 10,
-                "red",
                 {
                     x: 0,
                     y: -15,
@@ -544,7 +551,6 @@ addEventListener("keyup", (ev) => {
                 player1.position.x + 45,
                 player1.position.y + 70,
                 10,
-                "red",
                 {
                     x: 0,
                     y: 15,
@@ -562,7 +568,6 @@ addEventListener("keyup", (ev) => {
                 player2.position.x + 25,
                 player2.position.y + 55,
                 10,
-                "black",
                 {
                     x: -15,
                     y: 0,
@@ -579,7 +584,6 @@ addEventListener("keyup", (ev) => {
                 player2.position.x + 50,
                 player2.position.y + 50,
                 10,
-                "black",
                 {
                     x: 15,
                     y: 0,
@@ -596,7 +600,6 @@ addEventListener("keyup", (ev) => {
                 player2.position.x + 40,
                 player2.position.y - 10,
                 10,
-                "black",
                 {
                     x: 0,
                     y: -15,
@@ -613,7 +616,6 @@ addEventListener("keyup", (ev) => {
                 player2.position.x + 45,
                 player2.position.y + 70,
                 10,
-                "black",
                 {
                     x: 0,
                     y: 15,
@@ -624,48 +626,48 @@ addEventListener("keyup", (ev) => {
     }
 });
 
-startGameBtn.addEventListener("click", () => {
+startGameBtn.addEventListener("click", () => { //ADICIONA UM EVENTO CLICK NO BOTAO JOGAR
     click.load();
-    click.play();
-    menuMusic.pause();
-    gameMusic.volume = 0.8
+    click.play(); // TOCA O CLICK DO MENU AO APERTAR
+    menuMusic.pause(); // PARA A MUSICA DO MENU
+    gameMusic.volume = 0.8 //TOCA A MUSICA DO JOGO
     gameMusic.load();
     gameMusic.play();
     gameMusic.loop = true;
-    menu.style.display = "none"
-    musicBtn.style.display = "none"
-    musicGameBtn.style.display = "block"
-    musicPlaying = false
-    estadoAtual = estados.jogando
-    player1.position.x = canvas.width / 2 - 100;
+    menu.style.display = "none" // APAGA OS MENUS
+    musicBtn.style.display = "none" // APAGA O BOTAO DE MUSICA DO MENU
+    musicGameBtn.style.display = "block" // MOSTRA O BOTAO DE MUSICA DO JOGO
+    musicPlaying = false //DIZ QUE A MUSICA DO MENU NAO ESTA TOCANDO
+    estadoAtual = estados.jogando //TROCA O ESTADO
+    player1.position.x = canvas.width / 2 - 100; // DEFINE AS POSIÇÕES DOS 2 PLAYERS
     player1.position.y = canvas.height / 2;
     player2.position.x = canvas.width / 2 + 40;
     player2.position.y = canvas.height / 2;
-    player1.score = 0;
+    player1.score = 0; //RESETA O SCORE
     player2.score = 0;
-    if(resetCount < 1){
+    if(resetCount < 1){ //USADO PARA APENAS CHAMAR A FUNÇÃO DE SPAWN UMA VEZ
         spawnEnemies()
     }
 })
 
-backToMenuBtn.addEventListener("click", () => {
-    click.load();
+backToMenuBtn.addEventListener("click", () => { //ADICIONA UM EVENTO AO CLICAR NO BOTAO DE VOLTAR AO MENU NO GAME OVER
+    click.load(); //TOCA O CLICK DO MENU
     click.play();
-    menuMusic.load();
+    menuMusic.load(); //TOCA A MUSICA DO MENU
     menuMusic.play();
     menuMusic.loop = true;
     musicPlaying = true
-    gameMusic.pause();
+    gameMusic.pause(); // PAUSA A MUSICA DO JOGO
     gameOver.style.display = "none"
     credits.style.display = "none"
-    menu.style.display = "flex"
-    musicBtn.style.display = "block"
+    menu.style.display = "flex" // MOSTRA O MENU PRINCIPAL E ESCONDE OS  OUTROS
+    musicBtn.style.display = "block" // MOSTRA O BOTAO DE MUSICA DO MENU E ESCONDE OS OUTROS
     musicGameBtn.style.display = "none"
-    estadoAtual = estados.jogar
+    estadoAtual = estados.jogar // TROCA O ESTADO PARA JOGAR
     resetCount = 1;
 })
 
-backToMenuBtn2.addEventListener("click", () => {
+backToMenuBtn2.addEventListener("click", () => { //FUNÇAO PARA VOLTAR AO MENU APÓS CRÉDITOS
     click.load();
     click.play();
     credits.style.display = "none"
@@ -673,7 +675,7 @@ backToMenuBtn2.addEventListener("click", () => {
     estadoAtual = estados.jogar
 })
 
-musicBtn.addEventListener("click", () => {
+musicBtn.addEventListener("click", () => { //ON E OFF DA MUSICA DO MENU
     click.load();
     click.play();
     if(musicPlaying == true){
@@ -687,7 +689,7 @@ musicBtn.addEventListener("click", () => {
     }
 })
 
-musicGameBtn.addEventListener("click", () => {
+musicGameBtn.addEventListener("click", () => { //ON E OFF DA MUSICA DO GAMEPLAY
     click.load();
     click.play();
     if(musicGamePlaying == true){
@@ -701,7 +703,7 @@ musicGameBtn.addEventListener("click", () => {
     }
 })
 
-backToMenuBtn3.addEventListener("click", () => {
+backToMenuBtn3.addEventListener("click", () => { //EVENTO PARA VOLTAR AO MENU APÓS O TUTORIAL
     click.load();
     click.play();
     tutorial.style.display = "none"
@@ -709,7 +711,7 @@ backToMenuBtn3.addEventListener("click", () => {
     estadoAtual = estados.jogar
 })
 
-tutoBtn.addEventListener("click", () => {
+tutoBtn.addEventListener("click", () => { //BOTAO QUE LEVA AO TUTORIAL
     click.load();
     click.play();
     gameOver.style.display = "none"
@@ -720,7 +722,7 @@ tutoBtn.addEventListener("click", () => {
     tutorial.style.backgroundImage = "url('./Sprites/Slide1.png')"
 })
 
-creditsBtn.addEventListener("click", () => {
+creditsBtn.addEventListener("click", () => { // EVENTO QUE LEVA AO MENU DE CRÉDITOS
     click.load();
     click.play();
     gameOver.style.display = "none"
@@ -729,7 +731,7 @@ creditsBtn.addEventListener("click", () => {
     credits.style.display = "flex"
 })
 
-nextSlide1.addEventListener("click", () => {
+nextSlide1.addEventListener("click", () => { // PASSA O SLIDE E ESCONDE O ANTERIOR NO TUTORIAL
     click.load();
     click.play();
     tutorial.style.backgroundImage = "url('./Sprites/Slide2.png')"
@@ -737,7 +739,7 @@ nextSlide1.addEventListener("click", () => {
     nextSlide1.style.display = "none"
 })
 
-nextSlide2.addEventListener("click", () => {
+nextSlide2.addEventListener("click", () => { // PASSA O SLIDE E ESCONDE O ANTERIOR NO TUTORIAL
     click.load();
     click.play();
     tutorial.style.backgroundImage = "url('./Sprites/Slide3.png')"
@@ -746,41 +748,47 @@ nextSlide2.addEventListener("click", () => {
 })
 
 function main(){
-    menuMusic = new Audio('./Audio/menuMusic.mp3')
-    menuMusic.load();
+    menuMusic = new Audio('./Audio/menuMusic.mp3') //SELECIONA O AUDIO DA MUSICA DO MENU
+    menuMusic.load(); //TOCA A MUSICA DO MENU
     menuMusic.play();
     menuMusic.loop = true;
     canvas = document.querySelector("canvas"); // acessando o canvas do html
     c = canvas.getContext("2d"); // pegando o context 2d do canvas
     canvas.width = 800;
-    canvas.height = 600;
-    c.font = "20px Sigmar";
+    canvas.height = 600; //DEFININDO O TAMANHO DO CANVAS
+    c.font = "20px Sigmar";//DEFININDO A FONTE
     background = new Image();
-    background.src = "./Sprites/background.jpeg"
+    background.src = "./Sprites/background.jpeg" //DEFININDO A SOURCE DO BACKGROUND
 
-    click = new Audio('./Audio/click3.mp3')
-    gameMusic = new Audio('./Audio/gameMusic.mp3')
+    click = new Audio('./Audio/click3.mp3') //DEFINE O SOM DO CLICK
+    gameMusic = new Audio('./Audio/gameMusic.mp3')// DEFINE A MUSICA DA GAMEPLAY
 
     hearts = new Image();
-    hearts.src = "./Sprites/heart.png"
+    hearts.src = "./Sprites/heart.png" //DEFINE O SPRITE DO CORAÇÃO
 
-    player1 = new Player("blue", canvas.width / 2 - 100, canvas.height / 2);
+    player1 = new Player(canvas.width / 2 - 100, canvas.height / 2); //CRIAÇÃO DO PLAYER 1
 
-    player2 = new Player("green", canvas.width / 2 + 40, canvas.height / 2);
+    player2 = new Player(canvas.width / 2 + 40, canvas.height / 2); // CRIAÇÃO DO PLAYER 2
     recordP1 = localStorage.getItem("recordP1")
     if (recordP1 == null)
-				recordP1 = 0;
+				recordP1 = 0; //ZERA O RECORD CASO NAO TENHA NO LOCAL STORAGE
 
     recordP2 = localStorage.getItem("recordP2")
     if (recordP2 == null)
                 recordP2 = 0;
-    keys1 = {
+    keys1 = { // ESTADOS DAS TECLAS APERTADAS DE CADA PLAYER PARA CALCULOS DE VELOCIDADE
         right: {
             pressed: false,
         },
         left: {
             pressed: false,
         },
+        up :{
+            pressed: false,
+        },
+        down: {
+            pressed: false
+        }
     };
     
     keys2 = {
@@ -790,18 +798,24 @@ function main(){
         left: {
             pressed: false,
         },
+        up :{
+            pressed: false,
+        },
+        down: {
+            pressed: false
+        }
     };
     
-    projectiles1 = [];
+    projectiles1 = []; //DEFINIÇÃO DOS ARRAYS DE PROJETEIS E INIMIGOS VAZIOS
     projectiles2 = [];
     enemies = [];
-    estadoAtual = estados.jogar
-    animate();
+    estadoAtual = estados.jogar //TROCA DE ESTADOS
+    animate(); // CHAMA A FUNÇÃO ANIMATE
 }
-    let proj1 = new Image();
+    let proj1 = new Image(); // DEFINE OS SPRITES DOS PROJÉTEIS
     proj1.src = "./Sprites/TIROAZUL.png";
     let proj2 = new Image();
     proj2.src = "./Sprites/TIROVERMELHO.png";
-    main()
+    main() // CHAMA O MAIN
     
 
